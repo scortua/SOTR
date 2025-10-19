@@ -49,7 +49,7 @@ void Port_EnableInterrupts(void)
 	}
 }
 
-void Port_DisbleInterrupts(void)
+void Port_DisableInterrupts(void)
 {
 	_disable_irq();
 	PortNextedCounter++;

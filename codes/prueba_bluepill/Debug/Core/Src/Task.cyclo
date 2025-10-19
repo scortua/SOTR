@@ -1,7 +1,7 @@
-..\Core\Src\Task.c:23:5:Task_Init	1
-..\Core\Src\Task.c:28:5:Task_CreateTask	7
-..\Core\Src\Task.c:56:5:Task_CreateIdleTask	1
-..\Core\Src\Task.c:71:5:Task_Delay	5
-..\Core\Src\Task.c:104:24:Task_GetIdleTask	1
-..\Core\Src\Task.c:109:6:Task_CheckDelayTimes	8
-..\Core\Src\Task.c:152:6:IdleTaskFunction	2
+../Core/Src/Task.c:23:5:Task_Init	1
+../Core/Src/Task.c:28:5:Task_CreateTask	7
+../Core/Src/Task.c:56:5:Task_CreateIdleTask	1
+../Core/Src/Task.c:71:5:Task_Delay	5
+../Core/Src/Task.c:104:24:Task_GetIdleTask	1
+../Core/Src/Task.c:109:6:Task_CheckDelayTimes	8
+../Core/Src/Task.c:152:6:IdleTaskFunction	2
