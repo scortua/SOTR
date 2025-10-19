@@ -18,7 +18,7 @@ void IdleTaskFunction(void);
 
 TaskControlBlock_t IdleTask;
 u32 IdleTaskStack[RTOS_MIN_STACK_SIZE];
-QueueElement_t TaskDelayWaitQueue;
+QueueHandler_t TaskDelayWaitQueue;
 
 u16 Task_Init(void)
 {
