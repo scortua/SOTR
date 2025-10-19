@@ -1,0 +1,9 @@
+../Core/Src/Portable.c:36:6:Port_EnableInterrupts	4	static,ignoring_inline_asm
+../Core/Src/Portable.c:52:6:Port_DisbleInterrupts	4	static,ignoring_inline_asm
+../Core/Src/Portable.c:59:6:Port_InitTickTimer	24	static
+../Core/Src/Portable.c:74:6:Port_SoftwareInterrupt	16	static
+../Core/Src/Portable.c:80:5:Port_GetSystemTick	4	static
+../Core/Src/Portable.c:85:5:Port_InitStack	24	static
+../Core/Src/Portable.c:128:6:Port_RestoreFirstContext	16	static,ignoring_inline_asm
+../Core/Src/Portable.c:146:28:SysTick_Handler	0	static,ignoring_inline_asm
+../Core/Src/Portable.c:154:28:PendSV_Handler	0	static,ignoring_inline_asm
