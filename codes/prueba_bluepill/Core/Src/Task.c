@@ -76,12 +76,12 @@ u16 Task_Delay(u32 Ticks)
 		u8 CallScheduller = 0;
 		Res = TASK_ERR_NULL_PARAM;
 		Port_DisableInterrupts();
-		TaskControlBlock_t_ptr Tcb = Scheduller_GetActualTask;
+		TaskControlBlock_t_ptr Tcb = Scheduller_GetActualTask();
 		if(Tcb != NULL)
 		{
 			Tcb->DelayTime = Ticks;
 			Tcb->Status = ST_BLOCKED;
-			Res = Queue_Enqueue(&TaskDelayWaitQueue, Tcb->QElement, (void*)Tcb);
+			Res = Queue_Enqueue(&TaskDelayWaitQueue, &Tcb->QElement, (void*)Tcb);
 			if(Res == QUEUE_OK)
 			{
 				CallScheduller = 1;
@@ -114,13 +114,13 @@ void Task_CheckDelayTimes(u32 Ticks)
 	{
 		u16 Res;
 		QueueHandler_t TempQueue;
-		TaskControlBlock_t_ptr Tcb;
+		TaskControlBlock_t_ptr Tcb = NULL;
 		Res = Queue_Init(&TempQueue);
 		if(Res == QUEUE_OK)
 		{
 			while(Queue_GetCount(&TaskDelayWaitQueue))
 			{
-				Res = Queue_Dequeue(&TaskDelayWaitQueue, (void**)Tcb);
+				Res = Queue_Dequeue(&TaskDelayWaitQueue, (void**) &Tcb);
 				if(Res == QUEUE_OK)
 				{
 					if(Tcb != NULL)

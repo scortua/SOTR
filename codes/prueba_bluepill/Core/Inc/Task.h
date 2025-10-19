@@ -47,6 +47,7 @@ typedef struct
 	TaskStatus_t Status;
 	// cada tarea tiene su stackpointer que guardar con la informacion que necesita guardar
 	u32 ActualStackPointer;
+	u32 DelayTime;
 	QueueElement_t QElement;
 }TaskControlBlock_t, * TaskControlBlock_t_ptr;
 

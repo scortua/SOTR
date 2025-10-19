@@ -1,2 +1,2 @@
-../Core/Src/RTOS.c:13:5:RTOS_Init	16	static
-../Core/Src/RTOS.c:27:6:RTOS_Start	16	static
+..\Core\Src\RTOS.c:13:5:RTOS_Init	16	static
+..\Core\Src\RTOS.c:27:6:RTOS_Start	16	static
