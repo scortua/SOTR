@@ -1,0 +1,2 @@
+../Core/Src/RTOS.c:10:5:RTOS_Init	3
+../Core/Src/RTOS.c:22:6:RTOS_Start	1
