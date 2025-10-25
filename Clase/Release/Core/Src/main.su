@@ -1,5 +1,0 @@
-../Core/Src/main.c:123:6:SystemClock_Config	88	static,ignoring_inline_asm
-../Core/Src/main.c:72:5:main	32	static
-../Core/Src/main.c:196:6:Tarea1	0	static
-../Core/Src/main.c:203:6:Tarea2	0	static
-../Core/Src/main.c:215:6:Error_Handler	0	static,ignoring_inline_asm

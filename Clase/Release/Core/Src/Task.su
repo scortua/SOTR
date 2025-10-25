@@ -1,4 +1,0 @@
-../Core/Src/Task.c:62:6:IdleTaskFunction	0	static
-../Core/Src/Task.c:19:5:Task_CreateTask	16	static
-../Core/Src/Task.c:44:5:Task_CreateIdleTask	16	static
-../Core/Src/Task.c:58:24:Task_GetIdleTask	0	static

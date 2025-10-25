@@ -1,4 +1,0 @@
-../Core/Src/Queue.c:39:7:Queue_Init	0	static
-../Core/Src/Queue.c:52:14:Queue_GetCount	0	static
-../Core/Src/Queue.c:61:7:Queue_Enqueue	0	static
-../Core/Src/Queue.c:85:7:Queue_Dequeue	0	static
