@@ -1,8 +1,0 @@
-../Core/Src/main.c:75:5:main	24	static
-../Core/Src/main.c:124:6:SystemClock_Config	88	static
-../Core/Src/main.c:171:13:MX_GPIO_Init	40	static
-../Core/Src/main.c:214:6:Tarea1_LED05	8	static
-../Core/Src/main.c:222:6:Tarea2_LED1	8	static
-../Core/Src/main.c:230:6:Tarea3_LED5	8	static
-../Core/Src/main.c:238:6:Tarea4_LEDB	16	static
-../Core/Src/main.c:262:6:Error_Handler	4	static,ignoring_inline_asm
