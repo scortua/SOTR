@@ -1,0 +1,2 @@
+../Core/Src/RTOS.c:10:5:RTOS_Init	8	static
+../Core/Src/RTOS.c:19:6:RTOS_Start	8	static

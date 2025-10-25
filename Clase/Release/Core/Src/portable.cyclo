@@ -1,0 +1,7 @@
+../Core/Src/portable.c:34:6:Portable_EnableInterrupts	3
+../Core/Src/portable.c:42:6:Portable_DisableInterrupts	1
+../Core/Src/portable.c:46:6:Port_InitTickTimer	1
+../Core/Src/portable.c:61:5:Port_InitStack	1
+../Core/Src/portable.c:103:28:Systick_Handler	1
+../Core/Src/portable.c:109:6:Port_RestoreFirstContext	1
+../Core/Src/portable.c:123:28:SysTick_Handler	1
