@@ -50,7 +50,10 @@ TaskControlBlock_t TcbTarea1;
 u32 StackTarea1[RTOS_MIN_STACK_SIZE];
 TaskControlBlock_t TcbTarea2;
 u32 StackTarea2[RTOS_MIN_STACK_SIZE];
-
+TaskControlBlock_t TcbTarea3;
+u32 StackTarea3[RTOS_MIN_STACK_SIZE];
+TaskControlBlock_t TcbTarea4;
+u32 StackTarea4[RTOS_MIN_STACK_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,6 +67,8 @@ static void MX_GPIO_Init(void);
 /* USER CODE BEGIN 0 */
 void Tarea1(void);
 void Tarea2(void);
+void Tarea3(void);
+void Tarea4(void);
 /* USER CODE END 0 */
 
 /**
@@ -99,8 +104,10 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   RTOS_Init();
-  RTOS_CreateTask(&TcbTarea1, "Tarea 1",1,1,StackTarea1,RTOS_MIN_STACK_SIZE,Tarea1);
-  RTOS_CreateTask(&TcbTarea2, "Tarea 2",2,1,StackTarea2,RTOS_MIN_STACK_SIZE,Tarea2);
+  RTOS_CreateTask(&TcbTarea1, "Led 0.5Hz",1,1,StackTarea1,RTOS_MIN_STACK_SIZE,Tarea1);
+  RTOS_CreateTask(&TcbTarea2, "Led 1Hz",2,1,StackTarea2,RTOS_MIN_STACK_SIZE,Tarea2);
+  RTOS_CreateTask(&TcbTarea3, "Led 5Hz",3,1,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
+  RTOS_CreateTask(&TcbTarea4, "Boton", 4,1,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
   RTOS_Start();
   /* USER CODE END 2 */
 
@@ -175,16 +182,33 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
 
-  /*Configure GPIO pin : LED_Pin */
-  GPIO_InitStruct.Pin = LED_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, LED4_Pin|LED2_Pin|LED3_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin : LED1_Pin */
+  GPIO_InitStruct.Pin = LED1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LED4_Pin LED2_Pin LED3_Pin */
+  GPIO_InitStruct.Pin = LED4_Pin|LED2_Pin|LED3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BUTTON_Pin */
+  GPIO_InitStruct.Pin = BUTTON_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BUTTON_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -193,19 +217,33 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 void Tarea1(void){
-	u32 Count = 0;
+
 	while(1){
-		Count++;
-		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
 		RTOS_Delay(1000);
 	}
 }
 
 void Tarea2(void){
-	u32 Count = 0;
 	while(1){
-		Count--;
-		RTOS_Delay(1000);
+		HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+		RTOS_Delay(500);
+	}
+}
+
+void Tarea3(void){
+	while(1){
+		HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
+		RTOS_Delay(100);
+	}
+}
+
+void Tarea4(void){
+	GPIO_PinState button_state;
+	while(1){
+		button_state = HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin);
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, !button_state);
+		RTOS_Delay(5);
 	}
 }
 /* USER CODE END 4 */
