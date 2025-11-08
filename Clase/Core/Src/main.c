@@ -54,7 +54,9 @@ TaskControlBlock_t TcbTarea3;
 u32 StackTarea3[RTOS_MIN_STACK_SIZE];
 TaskControlBlock_t TcbTarea4;
 u32 StackTarea4[RTOS_MIN_STACK_SIZE];
-MutexHandler_t Mutex;
+
+MutexHandler_t Mutex1;
+MutexHandler_t Mutex2;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -109,7 +111,8 @@ int main(void)
   RTOS_CreateTask(&TcbTarea2, "Led 1Hz",2,2,StackTarea2,RTOS_MIN_STACK_SIZE,Tarea2);
   RTOS_CreateTask(&TcbTarea3, "Led 5Hz",3,1,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
   RTOS_CreateTask(&TcbTarea4, "Boton", 4,1,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
-  Mutex_Init(&Mutex);
+  Mutex_Init(&Mutex1);
+  Mutex_Init(&Mutex2);
   RTOS_Start();
   /* USER CODE END 2 */
 
@@ -221,20 +224,30 @@ static void MX_GPIO_Init(void)
 void Tarea1(void){
 
 	while(1){
-		HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
-		RTOS_Delay(1000);
-		Mutex_Give(&Mutex);
-		RTOS_Delay(1000);
+		if(Mutex_Take(&Mutex1)==MUTEX_OK){
+			RTOS_Delay(10);
+			if(Mutex_Take(&Mutex2)==MUTEX_OK){
+				HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+				RTOS_Delay(1000);
+				Mutex_Give(&Mutex2);
+				RTOS_Delay(1000);
+			}
+			Mutex_Give(&Mutex1);
+		}
 	}
 }
 
 void Tarea2(void){
 	while(1){
-		if(Mutex_Take(&Mutex)==MUTEX_OK){
-			HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
-			RTOS_Delay(1000);
-			Mutex_Give(&Mutex);
-			RTOS_Delay(500);
+		if(Mutex_Take(&Mutex1)==MUTEX_OK){
+			RTOS_Delay(5);
+			if(Mutex_Take(&Mutex2)==MUTEX_OK){
+				HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+				RTOS_Delay(1000);
+				Mutex_Give(&Mutex2);
+				RTOS_Delay(500);
+			}
+			Mutex_Give(&Mutex1);
 		}
 	}
 }

@@ -7,6 +7,8 @@
 #include "mutex.h"
 #include "AppTypes.h"
 
+extern u16 Scheduller_SetTaskReady(TaskControlBlock_t_ptr Task);
+
 u16 Mutex_Init(MutexHandler_t_ptr Mutex){
 	u16 Res =  MUTEX_ERR_NULL_PARAM;
 	if(Mutex != NULL){
