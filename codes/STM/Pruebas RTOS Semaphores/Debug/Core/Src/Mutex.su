@@ -1,0 +1,3 @@
+../Core/Src/Mutex.c:16:5:Mutex_Init	24	static
+../Core/Src/Mutex.c:27:5:Mutex_Take	24	static
+../Core/Src/Mutex.c:65:5:Mutex_Give	32	static
