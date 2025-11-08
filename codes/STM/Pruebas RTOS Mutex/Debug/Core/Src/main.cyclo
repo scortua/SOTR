@@ -1,0 +1,8 @@
+../Core/Src/main.c:75:5:main	1
+../Core/Src/main.c:124:6:SystemClock_Config	3
+../Core/Src/main.c:171:13:MX_GPIO_Init	1
+../Core/Src/main.c:214:6:Tarea1_LED05	1
+../Core/Src/main.c:222:6:Tarea2_LED1	1
+../Core/Src/main.c:230:6:Tarea3_LED5	1
+../Core/Src/main.c:238:6:Tarea4_LEDB	2
+../Core/Src/main.c:262:6:Error_Handler	1
