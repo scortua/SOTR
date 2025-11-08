@@ -54,6 +54,7 @@ TaskControlBlock_t TcbTarea3;
 u32 StackTarea3[RTOS_MIN_STACK_SIZE];
 TaskControlBlock_t TcbTarea4;
 u32 StackTarea4[RTOS_MIN_STACK_SIZE];
+MutexHandler_t Mutex;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,9 +106,10 @@ int main(void)
   /* USER CODE BEGIN 2 */
   RTOS_Init();
   RTOS_CreateTask(&TcbTarea1, "Led 0.5Hz",1,1,StackTarea1,RTOS_MIN_STACK_SIZE,Tarea1);
-  RTOS_CreateTask(&TcbTarea2, "Led 1Hz",2,1,StackTarea2,RTOS_MIN_STACK_SIZE,Tarea2);
+  RTOS_CreateTask(&TcbTarea2, "Led 1Hz",2,2,StackTarea2,RTOS_MIN_STACK_SIZE,Tarea2);
   RTOS_CreateTask(&TcbTarea3, "Led 5Hz",3,1,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
   RTOS_CreateTask(&TcbTarea4, "Boton", 4,1,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
+  Mutex_Init(&Mutex);
   RTOS_Start();
   /* USER CODE END 2 */
 
@@ -221,29 +223,43 @@ void Tarea1(void){
 	while(1){
 		HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
 		RTOS_Delay(1000);
+		Mutex_Give(&Mutex);
+		RTOS_Delay(1000);
 	}
 }
 
 void Tarea2(void){
 	while(1){
-		HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
-		RTOS_Delay(500);
+		if(Mutex_Take(&Mutex)==MUTEX_OK){
+			HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+			RTOS_Delay(1000);
+			Mutex_Give(&Mutex);
+			RTOS_Delay(500);
+		}
 	}
 }
 
 void Tarea3(void){
 	while(1){
-		HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
-		RTOS_Delay(100);
+		if(Mutex_Take(&Mutex)==MUTEX_OK){
+			HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
+			RTOS_Delay(1000);
+			Mutex_Give(&Mutex);
+			RTOS_Delay(100);
+		}
 	}
 }
 
 void Tarea4(void){
 	GPIO_PinState button_state;
 	while(1){
-		button_state = HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin);
-		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, !button_state);
-		RTOS_Delay(5);
+		if(Mutex_Take(&Mutex) == MUTEX_OK){
+			button_state = HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin);
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, !button_state);
+			RTOS_Delay(1000);
+			Mutex_Give(&Mutex);
+			RTOS_Delay(5);
+		}
 	}
 }
 /* USER CODE END 4 */

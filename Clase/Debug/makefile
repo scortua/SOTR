@@ -60,8 +60,8 @@ all: main-build
 main-build: Clase.elf secondary-outputs
 
 # Tool invocations
-Clase.elf Clase.map: $(OBJS) $(USER_OBJS) C:\Users\jabel\STM32CubeIDE\workspace_1.19.0\Clase\STM32F401RCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Clase.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\jabel\STM32CubeIDE\workspace_1.19.0\Clase\STM32F401RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Clase.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Clase.elf Clase.map: $(OBJS) $(USER_OBJS) C:\Users\jabel\OneDrive\Documentos\ECI\10mo\ Semestre\SOTR\Clase\STM32F401RCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Clase.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\jabel\OneDrive\Documentos\ECI\10mo Semestre\SOTR\Clase\STM32F401RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Clase.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
