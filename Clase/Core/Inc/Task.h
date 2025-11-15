@@ -35,6 +35,7 @@ typedef struct{
 	u32 StackSize;
 	u32 ActualStackPointer;
 	u32 DelayTime;
+	EventType_t WaitEvent;
 	TaskStatus_t Status;
 	QueueElement_t QElement;
 }TaskControlBlock_t, * TaskControlBlock_t_ptr;

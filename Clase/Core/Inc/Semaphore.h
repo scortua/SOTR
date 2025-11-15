@@ -11,6 +11,8 @@
 #include "AppTypes.h"
 #include "Queue.h"
 #include "Task.h"
+#include "Scheduller.h"
+#include "portable.h"
 
 #define SEMAPHORE_BASE_ERR              0x0500
 

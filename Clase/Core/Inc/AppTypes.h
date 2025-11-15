@@ -66,4 +66,7 @@ typedef void * pv;
 #define NULL ((void *)0)
 #endif
 
+typedef u16 EventType_t;
+typedef EventType_t * EventType_t_ptr;
+
 #endif /* INC_APPTYPES_H_ */

@@ -43,6 +43,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+I2C_HandleTypeDef hi2c1;
 
 /* USER CODE BEGIN PV */
 
@@ -54,6 +55,7 @@ TaskControlBlock_t TcbTarea3;
 u32 StackTarea3[RTOS_MIN_STACK_SIZE];
 TaskControlBlock_t TcbTarea4;
 u32 StackTarea4[RTOS_MIN_STACK_SIZE];
+SemaphoreHandler_t Semaforo;
 
 MutexHandler_t Mutex1;
 MutexHandler_t Mutex2;
@@ -62,6 +64,7 @@ MutexHandler_t Mutex2;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -105,12 +108,14 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   RTOS_Init();
   RTOS_CreateTask(&TcbTarea1, "Led 0.5Hz",1,1,StackTarea1,RTOS_MIN_STACK_SIZE,Tarea1);
   RTOS_CreateTask(&TcbTarea2, "Led 1Hz",2,2,StackTarea2,RTOS_MIN_STACK_SIZE,Tarea2);
   RTOS_CreateTask(&TcbTarea3, "Led 5Hz",3,1,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
   RTOS_CreateTask(&TcbTarea4, "Boton", 4,1,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
+  Semaphore_Init(&Semaforo,5);
   Mutex_Init(&Mutex1);
   Mutex_Init(&Mutex2);
   RTOS_Start();
@@ -174,6 +179,40 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief I2C1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C1_Init(void)
+{
+
+  /* USER CODE BEGIN I2C1_Init 0 */
+
+  /* USER CODE END I2C1_Init 0 */
+
+  /* USER CODE BEGIN I2C1_Init 1 */
+
+  /* USER CODE END I2C1_Init 1 */
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.ClockSpeed = 400000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C1_Init 2 */
+
+  /* USER CODE END I2C1_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -188,6 +227,7 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
@@ -221,6 +261,32 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void Taera_ejemplo(void){
+	u32 Count = 0;
+	while(1){
+		if(Semaphore_Take(&Semaforo)==SEMAPHORE_OK){
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+			RTOS_Delay(100);
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+			RTOS_Delay(100);
+		}
+	}
+}
+
+
+void Taera_ejemplo1(void){
+	u32 Count = 0;
+	while(1){
+		if(Semaphore_Take(&Semaforo)==SEMAPHORE_OK){
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+			RTOS_Delay(100);
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+			RTOS_Delay(100);
+		}
+	}
+}
+
 void Tarea1(void){
 
 	while(1){
@@ -254,10 +320,10 @@ void Tarea2(void){
 
 void Tarea3(void){
 	while(1){
-		if(Mutex_Take(&Mutex)==MUTEX_OK){
+		if(Mutex_Take(&Mutex1)==MUTEX_OK){
 			HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
 			RTOS_Delay(1000);
-			Mutex_Give(&Mutex);
+			Mutex_Give(&Mutex1);
 			RTOS_Delay(100);
 		}
 	}
@@ -266,11 +332,11 @@ void Tarea3(void){
 void Tarea4(void){
 	GPIO_PinState button_state;
 	while(1){
-		if(Mutex_Take(&Mutex) == MUTEX_OK){
+		if(Mutex_Take(&Mutex1) == MUTEX_OK){
 			button_state = HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin);
 			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, !button_state);
 			RTOS_Delay(1000);
-			Mutex_Give(&Mutex);
+			Mutex_Give(&Mutex1);
 			RTOS_Delay(5);
 		}
 	}

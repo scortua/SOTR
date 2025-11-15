@@ -7,9 +7,9 @@
 
 #include "Semaphore.h"
 
-extern u16 Scheduller_SetTaskReady(TaskControlBlock_t_ptr Task, u16 Limit);
+extern u16 Scheduller_SetTaskReady(TaskControlBlock_t_ptr Task);
 
-u16 Semaphore_Init(SemaphoreHandler_t_ptr Semaphore){
+u16 Semaphore_Init(SemaphoreHandler_t_ptr Semaphore, u16 Limit){
 	u16 Res = SEMAPHORE_ERR_NULL_PARAM;
 	if(Semaphore != NULL){
 		Res = SEMAPHORE_ERR_WRONG_PARAM;
@@ -52,7 +52,7 @@ u16 Semaphore_Take(SemaphoreHandler_t_ptr Semaphore){
 			TaskControlBlock_t_ptr Task = Scheduller_GetActualTask();
 			if(Task != NULL){
 				Task ->Status = ST_BLOCKED;
-				Res = Queue_Enqueue(&Mutex->WaitQueue, &Task->QElement, (void *)Task);
+				Res = Queue_Enqueue(&Semaphore->WaitQueue, &Task->QElement, (void *)Task);
 				if(Res == QUEUE_OK){
 					CallScheduller = TRUE;
 				}else{
@@ -78,11 +78,11 @@ u16 Semaphore_Give(SemaphoreHandler_t_ptr Semaphore){
 			Res = Queue_Dequeue(&Semaphore->WaitQueue, (void **)&Task);
 			if(QUEUE_OK){
 				if(Task != NULL){
-					Res = Scheduller_SetTaskReady(&Task);
+					Res = Scheduller_SetTaskReady(Task);
 					if(SCHEDULLER_OK){
-						TaskControlBlock_t_ptr ActTask = Scheduller_GetActualTask();
-						if(ActTask != NULL){
-							if(ActTask->Priority > Task -> Priority){
+						TaskControlBlock_t_ptr ActualTask = Scheduller_GetActualTask();
+						if(ActualTask != NULL){
+							if(ActualTask->Priority > Task -> Priority){
 								CallScheduller = TRUE;
 
 							}

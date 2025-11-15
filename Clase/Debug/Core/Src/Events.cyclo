@@ -1,0 +1,6 @@
+../Core/Src/Events.c:12:5:Events_Init	2
+../Core/Src/Events.c:20:5:Events_Get	3
+../Core/Src/Events.c:29:5:Events_Set	14
+../Core/Src/Events.c:79:5:Events_Clear	2
+../Core/Src/Events.c:88:5:Events_WaitAny	2
+../Core/Src/Events.c:96:5:Events_WaitAll	2

@@ -41,6 +41,7 @@ u16 Task_CreateTask(TaskControlBlock_t_ptr Tcb, char * Name, u8 Id, u8 Priority,
 			Tcb -> Status = ST_READY;
 			Tcb -> QElement.Data = Tcb;
 			Tcb -> QElement.Next = NULL;
+			Tcb -> WaitEvent;
 			Tcb -> ActualStackPointer = Port_InitStack(Tcb -> Stack, Tcb -> StackSize, (pv)Tcb -> Function);
 			Res = Scheduller_SetTaskReady(Tcb);
 		}
@@ -57,7 +58,8 @@ u16 Task_CreateIdleTask(void){
 	IdleTask.Function = IdleTaskFunction;
 	IdleTask.Priority = RTOS_SYSTEM_PRIORITIES;
 	IdleTask.Status = ST_READY;
-	IdleTask.QElement.Data = (pv)&IdleTask;	IdleTask.QElement.Next = NULL;	IdleTask.ActualStackPointer = Port_InitStack(IdleTask.Stack, IdleTask.StackSize, (pv)IdleTask.Function);
+	IdleTask.QElement.Data = (pv)&IdleTask;	IdleTask.QElement.Next = NULL;
+	IdleTask.WaitEvent;	IdleTask.ActualStackPointer = Port_InitStack(IdleTask.Stack, IdleTask.StackSize, (pv)IdleTask.Function);
 	return TASK_OK;
 }
 
