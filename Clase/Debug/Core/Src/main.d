@@ -26,10 +26,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
- ../Core/Inc/mutex.h ../Core/Inc/AppTypes.h ../Core/Inc/Queue.h \
- ../Core/Inc/Task.h ../Core/Inc/Scheduller.h ../Core/Inc/portable.h \
- ../Core/Inc/AppTypes.h ../Core/Inc/RTOS.h ../Core/Inc/RTOSDefines.h \
- ../Core/Inc/Semaphore.h
+ ../Core/Inc/AppTypes.h ../Core/Inc/RTOS.h ../Core/Inc/AppTypes.h \
+ ../Core/Inc/Queue.h ../Core/Inc/RTOSDefines.h ../Core/Inc/Scheduller.h \
+ ../Core/Inc/Task.h ../Core/Inc/mutex.h ../Core/Inc/portable.h \
+ ../Core/Inc/Semaphore.h ../Core/Inc/Events.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -58,13 +58,14 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
-../Core/Inc/mutex.h:
-../Core/Inc/AppTypes.h:
-../Core/Inc/Queue.h:
-../Core/Inc/Task.h:
-../Core/Inc/Scheduller.h:
-../Core/Inc/portable.h:
 ../Core/Inc/AppTypes.h:
 ../Core/Inc/RTOS.h:
+../Core/Inc/AppTypes.h:
+../Core/Inc/Queue.h:
 ../Core/Inc/RTOSDefines.h:
+../Core/Inc/Scheduller.h:
+../Core/Inc/Task.h:
+../Core/Inc/mutex.h:
+../Core/Inc/portable.h:
 ../Core/Inc/Semaphore.h:
+../Core/Inc/Events.h:
