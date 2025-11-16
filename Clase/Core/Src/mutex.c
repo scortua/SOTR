@@ -55,10 +55,10 @@ u16 Mutex_Give(MutexHandler_t_ptr Mutex){
 		if(Queue_GetCount(&Mutex->WaitQueue)>0){
 			TaskControlBlock_t_ptr Task = NULL;
 			Res = Queue_Dequeue(&Mutex->WaitQueue, (void **)&Task);
-			if(Res == QUEUE_OK){
+			if(QUEUE_OK){
 				if(Task != NULL){
 					Res = Scheduller_SetTaskReady(Task);
-					if(Res == SCHEDULLER_OK){
+					if(SCHEDULLER_OK){
 						TaskControlBlock_t_ptr ActTask = Scheduller_GetActualTask();
 						if(ActTask != NULL){
 							if(ActTask->Priority > Task -> Priority){

@@ -35,9 +35,6 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define EVENT_TASK2			(1 << 0)
-#define EVENT_TASK3			(1 << 1)
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -62,10 +59,6 @@ SemaphoreHandler_t Semaforo;
 
 MutexHandler_t Mutex1;
 MutexHandler_t Mutex2;
-
-SemaphoreHandler_t Semaforo;
-
-EventHandler_t Evento;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -118,14 +111,13 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   RTOS_Init();
-  RTOS_CreateTask(&TcbTarea1, "Tarea 1",1,1,StackTarea1,RTOS_MIN_STACK_SIZE,Tarea1);
-  RTOS_CreateTask(&TcbTarea2, "Tarea 2",2,2,StackTarea2,RTOS_MIN_STACK_SIZE,Tarea2);
-  RTOS_CreateTask(&TcbTarea3, "Tarea 3",3,1,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
-  //RTOS_CreateTask(&TcbTarea4, "Boton", 4,1,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
+  RTOS_CreateTask(&TcbTarea1, "Led 0.5Hz",1,1,StackTarea1,RTOS_MIN_STACK_SIZE,Tarea1);
+  RTOS_CreateTask(&TcbTarea2, "Led 1Hz",2,2,StackTarea2,RTOS_MIN_STACK_SIZE,Tarea2);
+  RTOS_CreateTask(&TcbTarea3, "Led 5Hz",3,1,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
+  RTOS_CreateTask(&TcbTarea4, "Boton", 4,1,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
   Semaphore_Init(&Semaforo,5);
   Mutex_Init(&Mutex1);
   Mutex_Init(&Mutex2);
-  Events_Init(&Evento);
   RTOS_Start();
   /* USER CODE END 2 */
 
@@ -238,10 +230,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED4_Pin|LED2_Pin|LED3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED4_Pin|LED2_Pin|LED3_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin : LED1_Pin */
   GPIO_InitStruct.Pin = LED1_Pin;
@@ -270,61 +262,72 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+void Taera_ejemplo(void){
+	u32 Count = 0;
+	while(1){
+		if(Semaphore_Take(&Semaforo)==SEMAPHORE_OK){
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+			RTOS_Delay(100);
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+			RTOS_Delay(100);
+		}
+	}
+}
+
+
+void Taera_ejemplo1(void){
+	u32 Count = 0;
+	while(1){
+		if(Semaphore_Take(&Semaforo)==SEMAPHORE_OK){
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+			RTOS_Delay(100);
+			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
+			RTOS_Delay(100);
+		}
+	}
+}
+
 void Tarea1(void){
 
 	while(1){
-		if(Events_WaitAll(&Evento, EVENT_TASK2 | EVENT_TASK3)){
-			Events_Clear(&Evento, EVENT_TASK2 | EVENT_TASK3);
-			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-			RTOS_Delay(100);
-			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-			RTOS_Delay(100);
+		if(Mutex_Take(&Mutex1)==MUTEX_OK){
+			RTOS_Delay(10);
+			if(Mutex_Take(&Mutex2)==MUTEX_OK){
+				HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
+				RTOS_Delay(1000);
+				Mutex_Give(&Mutex2);
+				RTOS_Delay(1000);
+			}
+			Mutex_Give(&Mutex1);
 		}
-		RTOS_Delay(10);
-		/*if(Semaphore_Take(&Semaforo) == SEMAPHORE_OK){
-			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-			RTOS_Delay(100);
-			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-			RTOS_Delay(100);
-		}*/
 	}
 }
 
 void Tarea2(void){
 	while(1){
-		RTOS_Delay(5000);
-		Events_Set(&Evento, EVENT_TASK2);
-		/*if(Mutex_Take(&Mutex1) == MUTEX_OK){
+		if(Mutex_Take(&Mutex1)==MUTEX_OK){
 			RTOS_Delay(5);
-			if(Mutex_Take(&Mutex2) == MUTEX_OK){
-				while(Semaphore_GetCount(&Semaforo)){
-					Semaphore_Give(&Semaforo);
-				}
-				RTOS_Delay(2000);
+			if(Mutex_Take(&Mutex2)==MUTEX_OK){
+				HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+				RTOS_Delay(1000);
 				Mutex_Give(&Mutex2);
-				RTOS_Delay(1);
+				RTOS_Delay(500);
 			}
 			Mutex_Give(&Mutex1);
-		}*/
+		}
 	}
 }
 
-
-
 void Tarea3(void){
 	while(1){
-		RTOS_Delay(7000);
-		Events_Set(&Evento, EVENT_TASK3);
-		/*if(Mutex_Take(&Mutex1)==MUTEX_OK){
+		if(Mutex_Take(&Mutex1)==MUTEX_OK){
 			HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
 			RTOS_Delay(1000);
 			Mutex_Give(&Mutex1);
 			RTOS_Delay(100);
-		}*/
+		}
 	}
 }
-
-/*
 
 void Tarea4(void){
 	GPIO_PinState button_state;
@@ -338,9 +341,6 @@ void Tarea4(void){
 		}
 	}
 }
-
-*/
-
 /* USER CODE END 4 */
 
 /**

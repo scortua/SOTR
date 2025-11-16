@@ -13,9 +13,7 @@
 #include "Queue.h"
 #include "RTOSDefines.h"
 #include "Scheduller.h"
-#include "mutex.h"
 #include "Semaphore.h"
-#include "Events.h"
 #include "portable.h"
 
 #define RTOS_CreateTask				Task_CreateTask

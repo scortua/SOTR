@@ -22,7 +22,7 @@ u16 Semaphore_Init(SemaphoreHandler_t_ptr Semaphore, u16 Limit){
 	return Res;
 }
 u16 Semaphore_GetCount(SemaphoreHandler_t_ptr Semaphore){
-	u16 Res = 0;
+	u16 Res = SEMAPHORE_ERR_NULL_PARAM;
 	if(Semaphore != NULL){
 		Portable_DisableInterrupts();
 		Res = Semaphore -> Count;
@@ -32,7 +32,7 @@ u16 Semaphore_GetCount(SemaphoreHandler_t_ptr Semaphore){
 
 }
 u16 Semaphore_GetLimit(SemaphoreHandler_t_ptr Semaphore){
-	u16 Res = 0;
+	u16 Res = SEMAPHORE_ERR_NULL_PARAM;
 	if(Semaphore != NULL){
 		Portable_DisableInterrupts();
 		Res = Semaphore -> Limit;
@@ -43,15 +43,15 @@ u16 Semaphore_GetLimit(SemaphoreHandler_t_ptr Semaphore){
 u16 Semaphore_Take(SemaphoreHandler_t_ptr Semaphore){
 	u16 Res = SEMAPHORE_ERR_NULL_PARAM;
 	u8 CallScheduller = FALSE;
-	if(Semaphore != NULL){
+	if(Semaphore !=NULL){
 		Portable_DisableInterrupts();
-		if(Semaphore -> Count < Semaphore -> Limit){
+		if(Semaphore->Count < Semaphore->Limit){
 			Semaphore -> Count++;
 			Res = SEMAPHORE_OK;
 		}else{
 			TaskControlBlock_t_ptr Task = Scheduller_GetActualTask();
 			if(Task != NULL){
-				Task -> Status = ST_BLOCKED;
+				Task ->Status = ST_BLOCKED;
 				Res = Queue_Enqueue(&Semaphore->WaitQueue, &Task->QElement, (void *)Task);
 				if(Res == QUEUE_OK){
 					CallScheduller = TRUE;
@@ -76,10 +76,10 @@ u16 Semaphore_Give(SemaphoreHandler_t_ptr Semaphore){
 		if(Queue_GetCount(&Semaphore->WaitQueue)>0){
 			TaskControlBlock_t_ptr Task = NULL;
 			Res = Queue_Dequeue(&Semaphore->WaitQueue, (void **)&Task);
-			if(Res == QUEUE_OK){
+			if(QUEUE_OK){
 				if(Task != NULL){
 					Res = Scheduller_SetTaskReady(Task);
-					if(Res == SCHEDULLER_OK){
+					if(SCHEDULLER_OK){
 						TaskControlBlock_t_ptr ActualTask = Scheduller_GetActualTask();
 						if(ActualTask != NULL){
 							if(ActualTask->Priority > Task -> Priority){
