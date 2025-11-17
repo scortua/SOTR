@@ -1,0 +1,6 @@
+../Core/Src/Events.c:16:5:Events_Init	24	static
+../Core/Src/Events.c:27:5:Events_Get	24	static
+../Core/Src/Events.c:43:5:Events_Set	48	static
+../Core/Src/Events.c:110:5:Events_Clear	24	static
+../Core/Src/Events.c:122:5:Events_WaitAny	24	static
+../Core/Src/Events.c:133:5:Events_WaitAll	24	static

@@ -1,0 +1,5 @@
+../Core/Src/Semaphore.c:15:5:Semaphore_Init	3
+../Core/Src/Semaphore.c:31:5:Semaphore_GetCount	2
+../Core/Src/Semaphore.c:43:5:Semaphore_GetLimit	2
+../Core/Src/Semaphore.c:55:5:Semaphore_Take	6
+../Core/Src/Semaphore.c:93:5:Semaphore_Give	10
