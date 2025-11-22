@@ -1,0 +1,6 @@
+../Core/Src/queue.c:33:7:Queue_Init	24	static
+../Core/Src/queue.c:48:14:Queue_GetCount	16	static
+../Core/Src/queue.c:57:7:Queue_Enqueue	32	static
+../Core/Src/queue.c:83:7:Queue_Dequeue	24	static
+../Core/Src/queue.c:116:7:Queue_DequeueElement	24	static
+../Core/Src/queue.c:147:7:Queue_Copy	24	static

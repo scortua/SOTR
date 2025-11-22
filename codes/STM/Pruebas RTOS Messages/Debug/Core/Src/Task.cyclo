@@ -1,0 +1,7 @@
+../Core/Src/Task.c:23:5:Task_Init	1
+../Core/Src/Task.c:28:5:Task_CreateTask	7
+../Core/Src/Task.c:57:5:Task_CreateIdleTask	1
+../Core/Src/Task.c:73:5:Task_Delay	5
+../Core/Src/Task.c:106:24:Task_GetIdleTask	1
+../Core/Src/Task.c:111:6:Task_CheckDelayTimes	8
+../Core/Src/Task.c:154:6:IdleTaskFunction	2
