@@ -14,6 +14,8 @@
 #include "RTOSDefines.h"
 #include "Scheduller.h"
 #include "Semaphore.h"
+#include "Message.h"
+#include "mutex.h"
 #include "portable.h"
 
 #define RTOS_CreateTask				Task_CreateTask

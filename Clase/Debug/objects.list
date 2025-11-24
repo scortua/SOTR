@@ -1,6 +1,8 @@
 "./Core/Src/Events.o"
+"./Core/Src/Message.o"
 "./Core/Src/Queue.o"
 "./Core/Src/RTOS.o"
+"./Core/Src/SH1106.o"
 "./Core/Src/Scheduller.o"
 "./Core/Src/Semaphore.o"
 "./Core/Src/Task.o"

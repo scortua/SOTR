@@ -117,6 +117,33 @@ short Queue_Dequeue(QueueHandler_t_ptr Queue, void ** Data)
     return Res;
 }
 
+short Queue_DequeueElement(QueueHandler_t_ptr Queue, QueueElement_t_ptr * Element){
+    short Res = QUEUE_ERR_NULL_PARAM;
+    Portable_DisableInterrupts();
+    if((Queue != NULL) && (Element != NULL))
+    {
+    	Res = QUEUE_ERR_EMPTY;
+        if(Queue->Head != NULL)
+        {
+            *Element = Queue->Head;
+            if(Queue->Head->Next != NULL)
+            {
+                Queue->Head = Queue->Head->Next;
+                Queue->Count--;
+            }
+            else
+            {
+                Queue->Head = NULL;
+                Queue->Tail = NULL;
+                Queue->Count = 0;
+            }
+            Res = QUEUE_OK;
+        }
+    }
+    Portable_EnableInterrupts();
+    return Res;
+}
+
 short Queue_Copy(QueueHandler_t_ptr Or, QueueHandler_t_ptr De){
 	short Res = QUEUE_ERR_NULL_PARAM;
 	Portable_DisableInterrupts();

@@ -2,4 +2,5 @@
 ../Core/Src/Queue.c:55:14:Queue_GetCount	2
 ../Core/Src/Queue.c:64:7:Queue_Enqueue	4
 ../Core/Src/Queue.c:90:7:Queue_Dequeue	5
-../Core/Src/Queue.c:120:7:Queue_Copy	3
+../Core/Src/Queue.c:120:7:Queue_DequeueElement	5
+../Core/Src/Queue.c:147:7:Queue_Copy	3

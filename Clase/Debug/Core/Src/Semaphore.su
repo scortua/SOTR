@@ -1,5 +1,5 @@
 ../Core/Src/Semaphore.c:12:5:Semaphore_Init	24	static
-../Core/Src/Semaphore.c:24:5:Semaphore_GetCount	24	static
-../Core/Src/Semaphore.c:34:5:Semaphore_GetLimit	24	static
-../Core/Src/Semaphore.c:43:5:Semaphore_Take	24	static
-../Core/Src/Semaphore.c:71:5:Semaphore_Give	24	static
+../Core/Src/Semaphore.c:27:5:Semaphore_GetCount	24	static
+../Core/Src/Semaphore.c:37:5:Semaphore_GetLimit	24	static
+../Core/Src/Semaphore.c:46:5:Semaphore_Take	24	static
+../Core/Src/Semaphore.c:74:5:Semaphore_Give	24	static

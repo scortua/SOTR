@@ -9,12 +9,15 @@
 
 extern u16 Scheduller_SetTaskReady(TaskControlBlock_t_ptr Task);
 
-u16 Semaphore_Init(SemaphoreHandler_t_ptr Semaphore, u16 Limit){
+u16 Semaphore_Init(SemaphoreHandler_t_ptr Semaphore, u16 Limit, u16 Init){
 	u16 Res = SEMAPHORE_ERR_NULL_PARAM;
 	if(Semaphore != NULL){
 		Res = SEMAPHORE_ERR_WRONG_PARAM;
 		if(Limit){
-			Semaphore -> Count = 0;
+			if(Init > Limit){
+				Init = Limit;
+			}
+			Semaphore -> Count = Init;
 			Semaphore -> Limit = Limit;
 			Res = Queue_Init(&Semaphore -> WaitQueue);
 		}

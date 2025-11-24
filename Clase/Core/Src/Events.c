@@ -87,17 +87,67 @@ u16 Events_Clear(EventHandler_t_ptr Event, EventType_t Bits){
 }
 u16 Events_WaitAny(EventHandler_t_ptr Event, EventType_t Bits){
 	u16 Res = EVENT_ERR_NULL_PARAM;
-	if(Event != NULL){
-		Portable_DisableInterrupts();
-		Portable_EnableInterrupts();
-	}
-	return Res;
+	u8 CallScheduller = FALSE;
+	Bits &= EVENT_WAIT_TYPE_MASK;
+	if (Event && Bits){
+			Portable_DisableInterrupts();
+			if (Event->EventBits & Bits){
+				Res = EVENT_OK;
+			}
+			else{
+				TaskControlBlock_t_ptr ActualTask = Scheduller_GetActualTask();
+				if (ActualTask){
+					ActualTask->WaitEvent = Bits;
+					ActualTask->Status = ST_BLOCKED;
+					Res = Queue_Enqueue(&Event->WaitQueue, &ActualTask->QElement, (void*)ActualTask);
+					if (Res == QUEUE_OK){
+						CallScheduller = TRUE;
+					}
+					else {
+						ActualTask->Status = ST_RUNNING;
+					}
+				}
+				else {
+					Res = EVENT_ERR_NULL_PARAM;
+				}
+			}
+			Portable_EnableInterrupts();
+			if (CallScheduller){
+				Port_SoftwareInterrupt();
+			}
+		}
+		return Res;
 }
 u16 Events_WaitAll(EventHandler_t_ptr Event, EventType_t Bits){
-	u16 Res = EVENT_ERR_NULL_PARAM;
-	if(Event != NULL){
+	u16 res = EVENT_ERR_NULL_PARAM;
+	u8 CallScheduller = FALSE;
+	if (Event && Bits){
 		Portable_DisableInterrupts();
+		Bits &= EVENT_WAIT_TYPE_MASK;
+		if ((Event->EventBits & Bits) == Bits){
+			res = EVENT_OK;
+		}
+		else{
+			TaskControlBlock_t_ptr ActualTask = Scheduller_GetActualTask();
+			if (ActualTask){
+				ActualTask->WaitEvent = (Bits | EVENT_WAIT_ALL);
+				ActualTask->Status = ST_BLOCKED;
+				res = Queue_Enqueue(&Event->WaitQueue, &ActualTask->QElement, (void*)ActualTask);
+				if (res == QUEUE_OK){
+					CallScheduller = TRUE;
+				}
+				else {
+					ActualTask->Status = ST_RUNNING;
+				}
+			}
+			else {
+				res = EVENT_ERR_NULL_PARAM;
+			}
+		}
 		Portable_EnableInterrupts();
+		if (CallScheduller){
+			Port_SoftwareInterrupt();
+		}
 	}
-	return Res;
+	return res;
 }

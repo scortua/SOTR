@@ -6,8 +6,10 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Core/Src/Events.c \
+../Core/Src/Message.c \
 ../Core/Src/Queue.c \
 ../Core/Src/RTOS.c \
+../Core/Src/SH1106.c \
 ../Core/Src/Scheduller.c \
 ../Core/Src/Semaphore.c \
 ../Core/Src/Task.c \
@@ -22,8 +24,10 @@ C_SRCS += \
 
 OBJS += \
 ./Core/Src/Events.o \
+./Core/Src/Message.o \
 ./Core/Src/Queue.o \
 ./Core/Src/RTOS.o \
+./Core/Src/SH1106.o \
 ./Core/Src/Scheduller.o \
 ./Core/Src/Semaphore.o \
 ./Core/Src/Task.o \
@@ -38,8 +42,10 @@ OBJS += \
 
 C_DEPS += \
 ./Core/Src/Events.d \
+./Core/Src/Message.d \
 ./Core/Src/Queue.d \
 ./Core/Src/RTOS.d \
+./Core/Src/SH1106.d \
 ./Core/Src/Scheduller.d \
 ./Core/Src/Semaphore.d \
 ./Core/Src/Task.d \
@@ -60,7 +66,7 @@ Core/Src/%.o Core/Src/%.su Core/Src/%.cyclo: ../Core/Src/%.c Core/Src/subdir.mk
 clean: clean-Core-2f-Src
 
 clean-Core-2f-Src:
-	-$(RM) ./Core/Src/Events.cyclo ./Core/Src/Events.d ./Core/Src/Events.o ./Core/Src/Events.su ./Core/Src/Queue.cyclo ./Core/Src/Queue.d ./Core/Src/Queue.o ./Core/Src/Queue.su ./Core/Src/RTOS.cyclo ./Core/Src/RTOS.d ./Core/Src/RTOS.o ./Core/Src/RTOS.su ./Core/Src/Scheduller.cyclo ./Core/Src/Scheduller.d ./Core/Src/Scheduller.o ./Core/Src/Scheduller.su ./Core/Src/Semaphore.cyclo ./Core/Src/Semaphore.d ./Core/Src/Semaphore.o ./Core/Src/Semaphore.su ./Core/Src/Task.cyclo ./Core/Src/Task.d ./Core/Src/Task.o ./Core/Src/Task.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/mutex.cyclo ./Core/Src/mutex.d ./Core/Src/mutex.o ./Core/Src/mutex.su ./Core/Src/portable.cyclo ./Core/Src/portable.d ./Core/Src/portable.o ./Core/Src/portable.su ./Core/Src/stm32f4xx_hal_msp.cyclo ./Core/Src/stm32f4xx_hal_msp.d ./Core/Src/stm32f4xx_hal_msp.o ./Core/Src/stm32f4xx_hal_msp.su ./Core/Src/stm32f4xx_it.cyclo ./Core/Src/stm32f4xx_it.d ./Core/Src/stm32f4xx_it.o ./Core/Src/stm32f4xx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32f4xx.cyclo ./Core/Src/system_stm32f4xx.d ./Core/Src/system_stm32f4xx.o ./Core/Src/system_stm32f4xx.su
+	-$(RM) ./Core/Src/Events.cyclo ./Core/Src/Events.d ./Core/Src/Events.o ./Core/Src/Events.su ./Core/Src/Message.cyclo ./Core/Src/Message.d ./Core/Src/Message.o ./Core/Src/Message.su ./Core/Src/Queue.cyclo ./Core/Src/Queue.d ./Core/Src/Queue.o ./Core/Src/Queue.su ./Core/Src/RTOS.cyclo ./Core/Src/RTOS.d ./Core/Src/RTOS.o ./Core/Src/RTOS.su ./Core/Src/SH1106.cyclo ./Core/Src/SH1106.d ./Core/Src/SH1106.o ./Core/Src/SH1106.su ./Core/Src/Scheduller.cyclo ./Core/Src/Scheduller.d ./Core/Src/Scheduller.o ./Core/Src/Scheduller.su ./Core/Src/Semaphore.cyclo ./Core/Src/Semaphore.d ./Core/Src/Semaphore.o ./Core/Src/Semaphore.su ./Core/Src/Task.cyclo ./Core/Src/Task.d ./Core/Src/Task.o ./Core/Src/Task.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/mutex.cyclo ./Core/Src/mutex.d ./Core/Src/mutex.o ./Core/Src/mutex.su ./Core/Src/portable.cyclo ./Core/Src/portable.d ./Core/Src/portable.o ./Core/Src/portable.su ./Core/Src/stm32f4xx_hal_msp.cyclo ./Core/Src/stm32f4xx_hal_msp.d ./Core/Src/stm32f4xx_hal_msp.o ./Core/Src/stm32f4xx_hal_msp.su ./Core/Src/stm32f4xx_it.cyclo ./Core/Src/stm32f4xx_it.d ./Core/Src/stm32f4xx_it.o ./Core/Src/stm32f4xx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32f4xx.cyclo ./Core/Src/system_stm32f4xx.d ./Core/Src/system_stm32f4xx.o ./Core/Src/system_stm32f4xx.su
 
 .PHONY: clean-Core-2f-Src
 

@@ -28,7 +28,6 @@
 #define QUEUE_ERR_NULL_PARAM        QUEUE_BASE_ERR | 0x00FF
 #define QUEUE_ERR_EMPTY             QUEUE_BASE_ERR | 0x00FE
 
-
 /*********************************************
 *    DEFINICIÓN DE TIPOS
 * *******************************************/
@@ -54,6 +53,7 @@ short Queue_Init(QueueHandler_t_ptr Queue);
 unsigned int Queue_GetCount(QueueHandler_t_ptr Queue);
 short Queue_Enqueue(QueueHandler_t_ptr Queue, QueueElement_t_ptr Element, void * Data);
 short Queue_Dequeue(QueueHandler_t_ptr Queue, void ** Data);
+short Queue_DequeueElement(QueueHandler_t_ptr Queue, QueueElement_t_ptr * Element);
 short Queue_Copy(QueueHandler_t_ptr Or, QueueHandler_t_ptr De);
 
 

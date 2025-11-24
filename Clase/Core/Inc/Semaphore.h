@@ -27,7 +27,7 @@ typedef struct{
 	QueueHandler_t WaitQueue;
 }SemaphoreHandler_t, *SemaphoreHandler_t_ptr;
 
-u16 Semaphore_Init(SemaphoreHandler_t_ptr Semaphore, u16 Limit);
+u16 Semaphore_Init(SemaphoreHandler_t_ptr Semaphore, u16 Limit, u16 Init);
 u16 Semaphore_GetCount(SemaphoreHandler_t_ptr Semaphore);
 u16 Semaphore_GetLimit(SemaphoreHandler_t_ptr Semaphore);
 u16 Semaphore_Take(SemaphoreHandler_t_ptr Semaphore);
