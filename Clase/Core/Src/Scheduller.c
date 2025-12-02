@@ -32,9 +32,11 @@ u16 Scheduller_Init(void){
 u16 Scheduller_SetTaskReady(TaskControlBlock_t_ptr Task){
 	u16 Res = SCHEDULLER_ERR_NULL_PARAM;
 	if(Task != NULL){
-		Task -> Status = ST_READY;
-		if(Task->Priority < RTOS_SYSTEM_PRIORITIES){
-			Res = Queue_Enqueue(&SchedullerReadyTasks[Task->Priority], &Task -> QElement, Task);
+		if(Task ->Status != ST_STACK_OVERFLOW){
+			Task -> Status = ST_READY;
+			if(Task->Priority < RTOS_SYSTEM_PRIORITIES){
+				Res = Queue_Enqueue(&SchedullerReadyTasks[Task->Priority], &Task -> QElement, Task);
+			}
 		}
 	}
 	return Res;
@@ -49,8 +51,12 @@ u32 Scheduller_GetNextTask(u32 ActualStack){
 		if(ActualTask != NULL){
 			ActualTask -> ActualStackPointer = ActualStack;
 			if(ActualTask -> Id){
-				if(ActualTask -> Status == ST_RUNNING){
-					Scheduller_SetTaskReady(ActualTask);
+				if(Port_CheckStackOverflow(ActualTask -> Stack)){
+					ActualTask -> Status = ST_STACK_OVERFLOW;
+				}else{
+					if(ActualTask -> Status == ST_RUNNING){
+						Scheduller_SetTaskReady(ActualTask);
+					}
 				}
 			}else{
 				ActualTask -> Status = ST_READY;

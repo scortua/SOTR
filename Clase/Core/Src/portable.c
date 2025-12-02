@@ -9,7 +9,12 @@
 #include "AppTypes.h"
 #include "portable.h"
 
+#include "string.h"
+
 extern u32 Scheduller_GetNextTask(u32 ActualTask);
+
+#define STACK_CHECH_BYTE				0XAAAAAAAA
+#define STACK_CHECK_SIZE				16
 
 #define _enable_irq()	{ asm ("cpsie i"); }
 #define _disable_irq()	{ asm ("cpsid i"); }
@@ -69,6 +74,7 @@ u32 Port_GetSystemTick(void){
 }
 
 u32 Port_InitStack(pu32 Stack, u32 StackSize, pv Fuction){
+	memset(Stack,STACK_CHECH_BYTE,StackSize * sizeof(u32));
 	Stack += StackSize;
 	Stack--;
 	*Stack = 0X01000000UL;								// PSR
@@ -138,4 +144,15 @@ __attribute__((naked))void PendSV_Handler(void){
 	Port_SaveContext();
 	PortActualStackPointer = Scheduller_GetNextTask(PortActualStackPointer);
 	Port_RestoreContext();
+}
+
+u8 Port_CheckStackOverflow(pu32 Stack){
+	u8 Res = FALSE;
+	for(int i = STACK_CHECK_SIZE - 1; i >= 0; i--){
+		if(Stack[i] != STACK_CHECH_BYTE){
+			Res = TRUE;
+			break;
+		}
+	}
+	return Res;
 }

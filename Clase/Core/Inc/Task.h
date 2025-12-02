@@ -23,7 +23,8 @@ typedef void (*TaskFunction)(void);
 typedef enum{
 	ST_READY = 0,
 	ST_RUNNING,
-	ST_BLOCKED
+	ST_BLOCKED,
+	ST_STACK_OVERFLOW
 }TaskStatus_t, * TaskStatus_t_ptr;
 
 typedef struct{

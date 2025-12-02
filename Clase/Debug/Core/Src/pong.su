@@ -1,0 +1,5 @@
+../Core/Src/pong.c:29:6:DrawPlayer	24	static
+../Core/Src/pong.c:41:6:UpdateHeadPlayer1	16	static
+../Core/Src/pong.c:45:6:UpdateHeadPlayer2	16	static
+../Core/Src/pong.c:49:6:DrawPong	24	static
+../Core/Src/pong.c:58:6:PongMovement	4	static

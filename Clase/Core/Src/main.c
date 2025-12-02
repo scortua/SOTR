@@ -44,31 +44,35 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
+
 I2C_HandleTypeDef hi2c1;
 
 /* USER CODE BEGIN PV */
 
 TaskControlBlock_t TcbTarea1;
-u32 StackTarea1[RTOS_MIN_STACK_SIZE];
+u32 StackTarea1[RTOS_MIN_STACK_SIZE * 4];
 TaskControlBlock_t TcbTarea2;
-u32 StackTarea2[RTOS_MIN_STACK_SIZE];
-TaskControlBlock_t TcbTarea3;
-u32 StackTarea3[RTOS_MIN_STACK_SIZE];
-TaskControlBlock_t TcbTarea4;
-u32 StackTarea4[RTOS_MIN_STACK_SIZE];
-SemaphoreHandler_t Semaforo;
+u32 StackTarea2[RTOS_MIN_STACK_SIZE * 2];
+//TaskControlBlock_t TcbTarea3;
+//u32 StackTarea3[RTOS_MIN_STACK_SIZE];
+//TaskControlBlock_t TcbTarea4;
+//u32 StackTarea4[RTOS_MIN_STACK_SIZE];
+//SemaphoreHandler_t Semaforo;
 
-MutexHandler_t Mutex1;
-MutexHandler_t Mutex2;
+MutexHandler_t Mutex;
 
-u8 MsgPool[MSG_GET_POOL_SIXE(sizeof(u32),2)];
-MessageHandler_t Msg;
+//u8 MsgPool[MSG_GET_POOL_SIXE(sizeof(u32),2)];
+//MessageHandler_t Msg;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_I2C1_Init(void);
+static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -79,6 +83,8 @@ void Tarea1(void);
 void Tarea2(void);
 void Tarea3(void);
 void Tarea4(void);
+
+uint32_t playery;
 /* USER CODE END 0 */
 
 /**
@@ -90,7 +96,8 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 
-	u16 Count = 0;
+
+
 
   /* USER CODE END 1 */
 
@@ -100,7 +107,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  Count++;
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -112,17 +119,19 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_I2C1_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   RTOS_Init();
-  RTOS_CreateTask(&TcbTarea1, "Led 0.5Hz",1,1,StackTarea1,RTOS_MIN_STACK_SIZE,Tarea1);
-  //RTOS_CreateTask(&TcbTarea2, "Led 1Hz",2,2,StackTarea2,RTOS_MIN_STACK_SIZE,Tarea2);
+  RTOS_CreateTask(&TcbTarea1, "Actualizar pantalla",1,2,StackTarea1,RTOS_MIN_STACK_SIZE * 4,Tarea1);
+  RTOS_CreateTask(&TcbTarea2, "Tomar valor i/o",2,1,StackTarea2,RTOS_MIN_STACK_SIZE * 2,Tarea2);
   //RTOS_CreateTask(&TcbTarea3, "Led 5Hz",3,1,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
   //RTOS_CreateTask(&TcbTarea4, "Boton", 4,1,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
   //Semaphore_Init(&Semaforo,5,0);
-  Message_Init(&Msg, &MsgPool, sizeof(u32), 2);
-  Mutex_Init(&Mutex1);
-  Mutex_Init(&Mutex2);
+  //Message_Init(&Msg, &MsgPool, sizeof(u32), 2);
+  Mutex_Init(&Mutex);
+  //Mutex_Init(&Mutex2);
 
   RTOS_Start();
 
@@ -186,6 +195,68 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = ENABLE;
+  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.DiscontinuousConvMode = ENABLE;
+  hadc1.Init.NbrOfDiscConversion = 2;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 2;
+  hadc1.Init.DMAContinuousRequests = ENABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_2;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_15CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_8;
+  sConfig.Rank = 2;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
   * @brief I2C1 Initialization Function
   * @param None
   * @retval None
@@ -220,6 +291,22 @@ static void MX_I2C1_Init(void)
 }
 
 /**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA2_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -240,7 +327,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED4_Pin|LED2_Pin|LED3_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : LED1_Pin */
   GPIO_InitStruct.Pin = LED1_Pin;
@@ -249,18 +336,18 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LED4_Pin LED2_Pin LED3_Pin */
-  GPIO_InitStruct.Pin = LED4_Pin|LED2_Pin|LED3_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
   /*Configure GPIO pin : BUTTON_Pin */
   GPIO_InitStruct.Pin = BUTTON_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(BUTTON_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BUZZER_Pin */
+  GPIO_InitStruct.Pin = BUZZER_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(BUZZER_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -270,56 +357,38 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 void Tarea1(void){
-    SH1106_Init();
-  	SH1106_UpdateScreen();
-	while(1){
-		for(int i = 0; i < 64; i++){
-			SH1106_DrawPixel(i, i, SH1106_COLOR_WHITE);
-			SH1106_UpdateScreen();
 
+	  SH1106_Init();
+	  SH1106_Clear();
+	  SH1106_UpdateScreen();
+	while(1){
+		SH1106_Clear();
+		if(Mutex_Take(&Mutex) == MUTEX_OK){
+			// Dibujar jugadores
+			DrawPlayer(playery);
+			//Dibujar pelota
+			DrawPong(64, 30);
+			Mutex_Give(&Mutex);
+			RTOS_Delay(1);
 		}
-		RTOS_Delay(1000);
+		RTOS_Delay(5);
 	}
 }
 
 void Tarea2(void){
 	while(1){
-		if(Mutex_Take(&Mutex1)==MUTEX_OK){
+		// Leer el primer canal y segundo canal
+		// Dependiendo de los instantes
+		if(Mutex_Take(&Mutex) == MUTEX_OK){
+			HAL_ADC_Start_DMA(&hadc1, &playery, 2);
 			RTOS_Delay(5);
-			if(Mutex_Take(&Mutex2)==MUTEX_OK){
-				HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
-				RTOS_Delay(1000);
-				Mutex_Give(&Mutex2);
-				RTOS_Delay(500);
-			}
-			Mutex_Give(&Mutex1);
+			HAL_ADC_Stop_DMA(&hadc1);
+			Mutex_Give(&Mutex);
+			RTOS_Delay(1);
 		}
 	}
 }
 
-void Tarea3(void){
-	while(1){
-		if(Mutex_Take(&Mutex1)==MUTEX_OK){
-			HAL_GPIO_TogglePin(LED4_GPIO_Port, LED4_Pin);
-			RTOS_Delay(1000);
-			Mutex_Give(&Mutex1);
-			RTOS_Delay(100);
-		}
-	}
-}
-
-void Tarea4(void){
-	GPIO_PinState button_state;
-	while(1){
-		if(Mutex_Take(&Mutex1) == MUTEX_OK){
-			button_state = HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin);
-			HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, !button_state);
-			RTOS_Delay(1000);
-			Mutex_Give(&Mutex1);
-			RTOS_Delay(5);
-		}
-	}
-}
 /* USER CODE END 4 */
 
 /**
