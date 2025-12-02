@@ -5,5 +5,6 @@
 ../Core/Src/main.c:296:13:MX_DMA_Init	1
 ../Core/Src/main.c:314:13:MX_GPIO_Init	1
 ../Core/Src/main.c:359:6:Tarea1	2
-../Core/Src/main.c:378:6:Tarea2	2
-../Core/Src/main.c:398:6:Error_Handler	1
+../Core/Src/main.c:377:6:Tarea2	2
+../Core/Src/main.c:391:6:Tarea3	2
+../Core/Src/main.c:409:6:Error_Handler	1

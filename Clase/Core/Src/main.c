@@ -55,8 +55,8 @@ TaskControlBlock_t TcbTarea1;
 u32 StackTarea1[RTOS_MIN_STACK_SIZE * 4];
 TaskControlBlock_t TcbTarea2;
 u32 StackTarea2[RTOS_MIN_STACK_SIZE * 2];
-//TaskControlBlock_t TcbTarea3;
-//u32 StackTarea3[RTOS_MIN_STACK_SIZE];
+TaskControlBlock_t TcbTarea3;
+u32 StackTarea3[RTOS_MIN_STACK_SIZE];
 //TaskControlBlock_t TcbTarea4;
 //u32 StackTarea4[RTOS_MIN_STACK_SIZE];
 //SemaphoreHandler_t Semaforo;
@@ -126,7 +126,7 @@ int main(void)
   RTOS_Init();
   RTOS_CreateTask(&TcbTarea1, "Actualizar pantalla",1,2,StackTarea1,RTOS_MIN_STACK_SIZE * 4,Tarea1);
   RTOS_CreateTask(&TcbTarea2, "Tomar valor i/o",2,1,StackTarea2,RTOS_MIN_STACK_SIZE * 2,Tarea2);
-  //RTOS_CreateTask(&TcbTarea3, "Led 5Hz",3,1,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
+  RTOS_CreateTask(&TcbTarea3, "GameLogic",3,3,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
   //RTOS_CreateTask(&TcbTarea4, "Boton", 4,1,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
   //Semaphore_Init(&Semaforo,5,0);
   //Message_Init(&Msg, &MsgPool, sizeof(u32), 2);
@@ -365,13 +365,12 @@ void Tarea1(void){
 		SH1106_Clear();
 		if(Mutex_Take(&Mutex) == MUTEX_OK){
 			// Dibujar jugadores
-			DrawPlayer(playery);
+			DrawPlayers();
 			//Dibujar pelota
-			DrawPong(64, 30);
+			DrawPong();
 			Mutex_Give(&Mutex);
-			RTOS_Delay(1);
+			RTOS_Delay(5);
 		}
-		RTOS_Delay(5);
 	}
 }
 
@@ -383,6 +382,18 @@ void Tarea2(void){
 			HAL_ADC_Start_DMA(&hadc1, &playery, 2);
 			RTOS_Delay(5);
 			HAL_ADC_Stop_DMA(&hadc1);
+			Mutex_Give(&Mutex);
+			RTOS_Delay(1);
+		}
+	}
+}
+
+void Tarea3(void){
+	while(1){
+		if(Mutex_Take(&Mutex) == MUTEX_OK){
+			UpdateHeadPlayer1(playery);
+			UpdateHeadPlayer2(playery);
+			PongMovement();
 			Mutex_Give(&Mutex);
 			RTOS_Delay(1);
 		}
