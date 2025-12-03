@@ -22,6 +22,7 @@ u16 Events_Get(EventHandler_t_ptr Event, EventType_t_ptr Bits){
 	if((Event != NULL)&&(Bits != NULL)){
 		Portable_DisableInterrupts();
 		*Bits = Event -> EventBits;
+		Res = EVENT_OK;
 		Portable_EnableInterrupts();
 	}
 	return Res;
@@ -45,6 +46,7 @@ u16 Events_Set(EventHandler_t_ptr Event, EventType_t Bits){
 							if(Task->WaitEvent & EVENT_WAIT_ALL){
 								EventType_t TaskWaitEvent = (Task->WaitEvent &  EVENT_WAIT_TYPE_MASK);
 								if((TaskWaitEvent & Event->EventBits) == TaskWaitEvent){
+									Task -> WaitEvent = 0;
 									Res = Scheduller_SetTaskReady(Task);
 									if(ActualTask){
 										if(ActualTask -> Priority > Task -> Priority){
@@ -56,6 +58,7 @@ u16 Events_Set(EventHandler_t_ptr Event, EventType_t Bits){
 								}
 							}else{
 								if(Task -> WaitEvent & Event -> EventBits){
+									Task -> WaitEvent = 0;
 									Res = Scheduller_SetTaskReady(Task);
 									if(ActualTask -> Priority > Task -> Priority){
 										CallScheduller = TRUE;
@@ -67,6 +70,7 @@ u16 Events_Set(EventHandler_t_ptr Event, EventType_t Bits){
 						}
 					}
 				}
+				Res = Queue_Copy(&Temp, &Event -> WaitQueue);
 			}
 		}
 		Portable_EnableInterrupts();
@@ -89,7 +93,7 @@ u16 Events_WaitAny(EventHandler_t_ptr Event, EventType_t Bits){
 	u16 Res = EVENT_ERR_NULL_PARAM;
 	u8 CallScheduller = FALSE;
 	Bits &= EVENT_WAIT_TYPE_MASK;
-	if (Event && Bits){
+	if (Event != NULL){
 			Portable_DisableInterrupts();
 			if (Event->EventBits & Bits){
 				Res = EVENT_OK;
@@ -108,7 +112,7 @@ u16 Events_WaitAny(EventHandler_t_ptr Event, EventType_t Bits){
 					}
 				}
 				else {
-					Res = EVENT_ERR_NULL_PARAM;
+					Res = EVENT_ERR_WRONG_PARAM;
 				}
 			}
 			Portable_EnableInterrupts();
@@ -121,7 +125,7 @@ u16 Events_WaitAny(EventHandler_t_ptr Event, EventType_t Bits){
 u16 Events_WaitAll(EventHandler_t_ptr Event, EventType_t Bits){
 	u16 res = EVENT_ERR_NULL_PARAM;
 	u8 CallScheduller = FALSE;
-	if (Event && Bits){
+	if (Event != NULL){
 		Portable_DisableInterrupts();
 		Bits &= EVENT_WAIT_TYPE_MASK;
 		if ((Event->EventBits & Bits) == Bits){
@@ -141,7 +145,7 @@ u16 Events_WaitAll(EventHandler_t_ptr Event, EventType_t Bits){
 				}
 			}
 			else {
-				res = EVENT_ERR_NULL_PARAM;
+				res = EVENT_ERR_WRONG_PARAM;
 			}
 		}
 		Portable_EnableInterrupts();

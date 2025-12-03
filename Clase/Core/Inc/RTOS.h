@@ -16,6 +16,7 @@
 #include "Semaphore.h"
 #include "Message.h"
 #include "mutex.h"
+#include "Events.h"
 #include "portable.h"
 
 #define RTOS_CreateTask				Task_CreateTask

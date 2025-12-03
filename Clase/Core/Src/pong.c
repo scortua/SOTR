@@ -17,6 +17,10 @@
 #define x_center				64
 #define y_center				30
 
+#define EVENT_TASK				(1<<0)
+
+extern EventHandler_t Event;
+
 s16 head_player_1;
 s16 head_player_2;
 
@@ -68,7 +72,7 @@ void PongMovement(void){
 	// Cambio de velocidades debido a la colision con las paredes
 	if(Head_Pong_y == 0){
 		Speed_Pong_y = 1;
-		// Hacer sonido de colision
+		Events_Set(&Event, EVENT_TASK);
 	}else{
 		if(Head_Pong_y == 59){
 			Speed_Pong_y = -1;
@@ -76,12 +80,12 @@ void PongMovement(void){
 		}
 	}
 	// Cambio de velocidades debido a la colision con los jugadores
-	if((Head_Pong_x == 3) && ((Head_Pong_y <= head_player_1 + tamanio_jugador) || (Head_Pong_y + tamanio_pong >= head_player_1))){
+	if((Head_Pong_x == 3) && ((Head_Pong_y <= head_player_1 + tamanio_jugador) && (Head_Pong_y + tamanio_pong >= head_player_1))){
 		//Colision con el jugador 1
 		Speed_Pong_x = 1;
 		// Hacer sonido de colision
 	}else{
-		if((Head_Pong_x == 125) && ((Head_Pong_y <= head_player_2 + tamanio_jugador) || (Head_Pong_y + tamanio_pong >= head_player_2))){
+		if((Head_Pong_x == 125) && ((Head_Pong_y <= head_player_2 + tamanio_jugador) && (Head_Pong_y + tamanio_pong >= head_player_2))){
 			//Colision con el jugador 2
 			Speed_Pong_x = -1;
 			// Hacer sonido de colision

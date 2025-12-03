@@ -1,5 +1,5 @@
-../Core/Src/pong.c:29:6:DrawPlayers	3
-../Core/Src/pong.c:39:6:UpdateHeadPlayer1	1
-../Core/Src/pong.c:43:6:UpdateHeadPlayer2	1
-../Core/Src/pong.c:58:6:DrawPong	3
-../Core/Src/pong.c:67:6:PongMovement	9
+../Core/Src/pong.c:33:6:DrawPlayers	3
+../Core/Src/pong.c:43:6:UpdateHeadPlayer1	1
+../Core/Src/pong.c:47:6:UpdateHeadPlayer2	1
+../Core/Src/pong.c:62:6:DrawPong	3
+../Core/Src/pong.c:71:6:PongMovement	9

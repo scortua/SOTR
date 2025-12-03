@@ -30,7 +30,8 @@ Core/Src/stm32f4xx_hal_msp.o: ../Core/Src/stm32f4xx_hal_msp.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Core/Inc/pong.h ../Core/Inc/SH1106.h ../Core/Inc/main.h \
- ../Core/Inc/AppTypes.h
+ ../Core/Inc/AppTypes.h ../Core/Inc/Events.h ../Core/Inc/Queue.h \
+ ../Core/Inc/Task.h ../Core/Inc/Scheduller.h ../Core/Inc/portable.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -66,3 +67,8 @@ Core/Src/stm32f4xx_hal_msp.o: ../Core/Src/stm32f4xx_hal_msp.c \
 ../Core/Inc/SH1106.h:
 ../Core/Inc/main.h:
 ../Core/Inc/AppTypes.h:
+../Core/Inc/Events.h:
+../Core/Inc/Queue.h:
+../Core/Inc/Task.h:
+../Core/Inc/Scheduller.h:
+../Core/Inc/portable.h:
