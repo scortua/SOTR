@@ -1,0 +1,14 @@
+../Core/Src/main.c:147:5:main	1
+../Core/Src/main.c:212:6:SystemClock_Config	3
+../Core/Src/main.c:259:13:MX_ADC1_Init	3
+../Core/Src/main.c:311:13:MX_I2C1_Init	2
+../Core/Src/main.c:345:13:MX_GPIO_Init	1
+../Core/Src/main.c:378:6:Tarea_Input	7
+../Core/Src/main.c:423:6:Tarea_GameLogic	20
+../Core/Src/main.c:513:6:Tarea_Display	3
+../Core/Src/main.c:536:6:Tarea_Sound	7
+../Core/Src/main.c:571:6:DrawGame	1
+../Core/Src/main.c:593:6:DrawMenu	1
+../Core/Src/main.c:605:6:GenerarTono	5
+../Core/Src/main.c:630:6:ResetBall	3
+../Core/Src/main.c:645:6:Error_Handler	1

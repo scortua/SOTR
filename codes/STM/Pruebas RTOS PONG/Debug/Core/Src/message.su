@@ -1,0 +1,5 @@
+../Core/Src/Message.c:19:5:Message_Init	40	static
+../Core/Src/Message.c:56:5:Message_GetFree	24	static
+../Core/Src/Message.c:68:5:Message_GetSend	24	static
+../Core/Src/Message.c:79:5:Message_Send	24	static
+../Core/Src/Message.c:107:5:Message_Recv	24	static

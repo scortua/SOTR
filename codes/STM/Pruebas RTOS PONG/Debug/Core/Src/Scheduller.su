@@ -1,0 +1,4 @@
+../Core/Src/Scheduller.c:19:5:Scheduller_Init	16	static
+../Core/Src/Scheduller.c:33:24:Scheduller_GetActualTask	4	static
+../Core/Src/Scheduller.c:38:5:Scheduller_SetTaskReady	24	static
+../Core/Src/Scheduller.c:56:5:Scheduller_GetNextTask	24	static
