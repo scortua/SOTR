@@ -35,7 +35,7 @@ u16 Events_Set(EventHandler_t_ptr Event, EventType_t Bits){
 		Event -> EventBits |= (Bits & EVENT_WAIT_TYPE_MASK);
 		if(Queue_GetCount(&Event->WaitQueue)){
 			QueueHandler_t Temp;
-			Res = Queue_Init(&Event->WaitQueue);
+			Res = Queue_Init(&Temp);
 			TaskControlBlock_t_ptr ActualTask = Scheduller_GetActualTask();
 			if(Res == QUEUE_OK){
 				while(Queue_GetCount(&Event -> WaitQueue)){

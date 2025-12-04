@@ -36,8 +36,6 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define EVENT_TASK		(1<<0)
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -129,7 +127,7 @@ int main(void)
   RTOS_CreateTask(&TcbTarea1, "Actualizar pantalla",1,2,StackTarea1,RTOS_MIN_STACK_SIZE * 4,Tarea1);
   RTOS_CreateTask(&TcbTarea2, "Tomar valor i/o",2,1,StackTarea2,RTOS_MIN_STACK_SIZE * 2,Tarea2);
   RTOS_CreateTask(&TcbTarea3, "GameLogic",3,3,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
-  RTOS_CreateTask(&TcbTarea4, "Sonido", 4,2,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
+  RTOS_CreateTask(&TcbTarea4, "Sonido", 4,4,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
   //Semaphore_Init(&Semaforo,5,0);
   //Message_Init(&Msg, &MsgPool, sizeof(u32), 2);
   Events_Init(&Event);
@@ -392,25 +390,49 @@ void Tarea2(void){
 }
 
 void Tarea3(void){
+	Status_Pong Estado_juego;
 	while(1){
 		if(Mutex_Take(&Mutex) == MUTEX_OK){
 			UpdateHeadPlayer1(playery);
 			UpdateHeadPlayer2(playery);
-			PongMovement();
-			Mutex_Give(&Mutex);
-			RTOS_Delay(1);
+			Estado_juego = PongMovement();
+			if(Estado_juego == GOL){
+				Mutex_Give(&Mutex);
+				RTOS_Delay(1000);
+			}else{
+				Mutex_Give(&Mutex);
+				RTOS_Delay(1);
+			}
 		}
 	}
 }
 
 void Tarea4(void){
 	while(1){
-		if(Events_WaitAny(&Event, EVENT_TASK) == EVENT_OK){
-			Events_Clear(&Event, EVENT_TASK);
-			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
-			RTOS_Delay(100);
-			HAL_GPIO_TogglePin(BUZZER_GPIO_Port, BUZZER_Pin);
+		if(Events_WaitAny(&Event, (EVENT_GOL | EVENT_PLAYER_COLLISION | EVENT_WALL_COLLISION)) == EVENT_OK){
+			EventType_t Eventos = 0;
+			if(Events_Get(&Event, &Eventos) == EVENT_OK){
+				if(Eventos & EVENT_PLAYER_COLLISION){
+					Events_Clear(&Event, EVENT_PLAYER_COLLISION);
+					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+					RTOS_Delay(2);
+					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+				}
+				if(Eventos & EVENT_WALL_COLLISION){
+					Events_Clear(&Event, EVENT_WALL_COLLISION);
+					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+					RTOS_Delay(10);
+					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+				}
+				if(Eventos & EVENT_GOL){
+					Events_Clear(&Event, EVENT_GOL);
+					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
+					RTOS_Delay(500);
+					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
+				}
+			}
 		}
+		RTOS_Delay(1);
 	}
 }
 

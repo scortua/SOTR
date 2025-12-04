@@ -12,6 +12,11 @@
 #include "AppTypes.h"
 #include "Events.h"
 
+typedef enum{
+	Playing = 0,
+	GOL
+}Status_Pong;
+
 void DrawPlayers(void);
 
 void UpdateHeadPlayer1(u32 head);
@@ -20,6 +25,8 @@ void UpdateHeadPlayer2(u32 head);
 
 void DrawPong(void);
 
-void PongMovement(void);
+void PongReset(void);
+
+Status_Pong PongMovement(void);
 
 #endif /* INC_PONG_H_ */

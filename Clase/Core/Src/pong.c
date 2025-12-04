@@ -17,9 +17,8 @@
 #define x_center				64
 #define y_center				30
 
-#define EVENT_TASK				(1<<0)
-
-#define Speed					2
+#define Speed_y					2
+#define Speed_x					1
 
 extern EventHandler_t Event;
 
@@ -29,8 +28,8 @@ s16 head_player_2;
 s16 Head_Pong_x = x_center;
 s16 Head_Pong_y = y_center;
 
-s8 Speed_Pong_x = Speed;
-s8 Speed_Pong_y = Speed;
+s8 Speed_Pong_x = Speed_x;
+s8 Speed_Pong_y = Speed_y;
 
 void DrawPlayers(void){
 	for(int i = head_player_1;i < head_player_1 + tamanio_jugador;i++){
@@ -70,51 +69,37 @@ void DrawPong(void){
 	SH1106_UpdateScreen();
 }
 
-void PongMovement(void){
+void PongReset(void){
+	Head_Pong_x = x_center;
+	Head_Pong_y = y_center;
+}
 
-	// Cambio de velocidades debido a la colision con los jugadores
-	if((Head_Pong_x == 3) && ((Head_Pong_y <= head_player_1 + tamanio_jugador) && (Head_Pong_y + tamanio_pong >= head_player_1))){
-		//Colision con el jugador 1
-		Speed_Pong_x = 1;
-		// Hacer sonido de colision
-	}else{
-		if((Head_Pong_x == 125) && ((Head_Pong_y <= head_player_2 + tamanio_jugador) && (Head_Pong_y + tamanio_pong >= head_player_2))){
-			//Colision con el jugador 2
-			Speed_Pong_x = -1;
-			// Hacer sonido de colision
-		}
-	}
+Status_Pong PongMovement(void){
 
-	// Caso de goles
-
-	if(Head_Pong_x == 2){
-		// Hacer el evento para hacer el sonido y sumar en el marcaddor para jugador 2
-	}else{
-		if(Head_Pong_x ==126){
-			// Hacer el evento para hacer el sonido y sumar en el marcaddor para jugador 2
-		}
-	}
+	Status_Pong Status = Playing;
 
 	// Cambio de velocidades debido a colision con paredes
 
-	if((Speed_Pong_y == -Speed) && ((Head_Pong_y + Speed_Pong_y) < 0)){
+	if((Speed_Pong_y == -Speed_y) && ((Head_Pong_y + Speed_Pong_y) < 0)){
 		Head_Pong_y += -Speed_Pong_y - (2 * Head_Pong_y);
-		Speed_Pong_y = Speed;
+		Speed_Pong_y = Speed_y;
+		Events_Set(&Event, EVENT_WALL_COLLISION);
 	}else{
-		if((Speed_Pong_y == Speed) && ((Head_Pong_y + Speed_Pong_y) > 63 - tamanio_pong)){
-			Head_Pong_y += 126 - (2*(Head_Pong_y + tamanio_pong))-Speed_Pong_y;;
-			Speed_Pong_y = -Speed;
+		if((Speed_Pong_y == Speed_y) && ((Head_Pong_y + Speed_Pong_y) > 63 - tamanio_pong - 1)){
+			Head_Pong_y += 126 - (2*(Head_Pong_y + tamanio_pong - 1)) - Speed_Pong_y;;
+			Speed_Pong_y = - Speed_y;
+			Events_Set(&Event, EVENT_WALL_COLLISION);
 		}else{
 			// Cambio de velocidades debido a la colision con las paredes (exacto)
 			if(Head_Pong_y == 0){
-				Speed_Pong_y = Speed;
+				Speed_Pong_y = Speed_y;
 				Head_Pong_y += Speed_Pong_y;
-				//Events_Set(&Event, EVENT_TASK);
+				Events_Set(&Event, EVENT_WALL_COLLISION);
 			}else{
 				if(Head_Pong_y == 59){
-					Speed_Pong_y = -Speed;
+					Speed_Pong_y = -Speed_y;
 					Head_Pong_y += Speed_Pong_y;
-					// Hacer sonido de colision
+					Events_Set(&Event, EVENT_WALL_COLLISION);
 				}else{
 					Head_Pong_y += Speed_Pong_y;
 				}
@@ -122,6 +107,35 @@ void PongMovement(void){
 		}
 	}
 
+	// Cambio de velocidades debido a la colision con los jugadores
+	if((Head_Pong_x == 3) && ((Head_Pong_y <= head_player_1 + tamanio_jugador) && (Head_Pong_y + tamanio_pong >= head_player_1))){
+		//Colision con el jugador 1
+		Speed_Pong_x = Speed_x;
+		Events_Set(&Event, EVENT_PLAYER_COLLISION);
+	}else{
+		if((Head_Pong_x == 125) && ((Head_Pong_y <= head_player_2 + tamanio_jugador) && (Head_Pong_y + tamanio_pong >= head_player_2))){
+			//Colision con el jugador 2
+			Speed_Pong_x = -Speed_x;
+			Events_Set(&Event, EVENT_PLAYER_COLLISION);
+		}
+	}
+
 	Head_Pong_x += Speed_Pong_x;
 
+	// Caso de goles
+
+	if(Head_Pong_x == 2){
+		Speed_Pong_x = -Speed_x;
+		Status = GOL;
+		PongReset();
+		Events_Set(&Event, EVENT_GOL);
+	}else{
+		if(Head_Pong_x ==126){
+			Speed_Pong_x = Speed_x;
+			Status = GOL;
+			PongReset();
+			Events_Set(&Event, EVENT_GOL);
+		}
+	}
+	return Status;
 }

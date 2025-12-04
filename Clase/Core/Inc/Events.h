@@ -25,6 +25,16 @@
 #define EVENT_WAIT_ALL				EVENT_WAIT_TYPE_BIT
 #define EVENT_WAIT_TYPE_MASK		(~EVENT_WAIT_TYPE_BIT)
 
+
+//////////////////////////////////////////////////////////////////////////
+///////////////////////////Eventos del proyecto///////////////////////////
+
+#define EVENT_PLAYER_COLLISION		(1<<0)
+#define EVENT_WALL_COLLISION		(1<<1)
+#define EVENT_GOL					(1<<2)
+
+/////////////////////////////////////////////////////////////////////////
+
 typedef struct{
 	EventType_t EventBits;
 	QueueHandler_t WaitQueue;
