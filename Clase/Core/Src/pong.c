@@ -19,6 +19,8 @@
 
 #define EVENT_TASK				(1<<0)
 
+#define Speed					2
+
 extern EventHandler_t Event;
 
 s16 head_player_1;
@@ -27,8 +29,8 @@ s16 head_player_2;
 s16 Head_Pong_x = x_center;
 s16 Head_Pong_y = y_center;
 
-s8 Speed_Pong_x = 1;
-s8 Speed_Pong_y = 1;
+s8 Speed_Pong_x = Speed;
+s8 Speed_Pong_y = Speed;
 
 void DrawPlayers(void){
 	for(int i = head_player_1;i < head_player_1 + tamanio_jugador;i++){
@@ -69,16 +71,7 @@ void DrawPong(void){
 }
 
 void PongMovement(void){
-	// Cambio de velocidades debido a la colision con las paredes
-	if(Head_Pong_y == 0){
-		Speed_Pong_y = 1;
-		Events_Set(&Event, EVENT_TASK);
-	}else{
-		if(Head_Pong_y == 59){
-			Speed_Pong_y = -1;
-			// Hacer sonido de colision
-		}
-	}
+
 	// Cambio de velocidades debido a la colision con los jugadores
 	if((Head_Pong_x == 3) && ((Head_Pong_y <= head_player_1 + tamanio_jugador) && (Head_Pong_y + tamanio_pong >= head_player_1))){
 		//Colision con el jugador 1
@@ -102,6 +95,33 @@ void PongMovement(void){
 		}
 	}
 
+	// Cambio de velocidades debido a colision con paredes
+
+	if((Speed_Pong_y == -Speed) && ((Head_Pong_y + Speed_Pong_y) < 0)){
+		Head_Pong_y += -Speed_Pong_y - (2 * Head_Pong_y);
+		Speed_Pong_y = Speed;
+	}else{
+		if((Speed_Pong_y == Speed) && ((Head_Pong_y + Speed_Pong_y) > 63 - tamanio_pong)){
+			Head_Pong_y += 126 - (2*(Head_Pong_y + tamanio_pong))-Speed_Pong_y;;
+			Speed_Pong_y = -Speed;
+		}else{
+			// Cambio de velocidades debido a la colision con las paredes (exacto)
+			if(Head_Pong_y == 0){
+				Speed_Pong_y = Speed;
+				Head_Pong_y += Speed_Pong_y;
+				//Events_Set(&Event, EVENT_TASK);
+			}else{
+				if(Head_Pong_y == 59){
+					Speed_Pong_y = -Speed;
+					Head_Pong_y += Speed_Pong_y;
+					// Hacer sonido de colision
+				}else{
+					Head_Pong_y += Speed_Pong_y;
+				}
+			}
+		}
+	}
+
 	Head_Pong_x += Speed_Pong_x;
-	Head_Pong_y += Speed_Pong_y;
+
 }
