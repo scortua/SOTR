@@ -48,12 +48,6 @@ static SH1106_t SH1106;
 #define SH1106_INVERTDISPLAY       0xA7
 
 uint8_t SH1106_Init(void) {
-
-	if (HAL_I2C_IsDeviceReady(SH1106_I2C, SH1106_I2C_ADDR, 1, 20000) != HAL_OK) {
-		/* Return false */
-		return 0;
-	}
-
 	  // Initialize the display
 	SH1106_WRITECOMMAND(0xAE); //display off
 	SH1106_WRITECOMMAND(0xB0|0x00); //Set Page Start Address for Page Addressing Mode,0-7

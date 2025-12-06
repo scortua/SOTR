@@ -1,9 +1,9 @@
 ../Core/Src/pong.c:40:6:DrawPlayers	3
-../Core/Src/pong.c:49:6:UpdateHeadPlayer1	1
-../Core/Src/pong.c:53:6:UpdateHeadPlayer2	1
-../Core/Src/pong.c:68:6:DrawPong	3
-../Core/Src/pong.c:76:6:PongReset	1
-../Core/Src/pong.c:83:13:PongMovement	15
-../Core/Src/pong.c:151:6:DrawText	1
-../Core/Src/pong.c:156:6:DrawScore	1
-../Core/Src/pong.c:165:6:ResetScore	1
+../Core/Src/pong.c:50:6:UpdateHeadPlayer1	1
+../Core/Src/pong.c:54:6:UpdateHeadPlayer2	1
+../Core/Src/pong.c:69:6:DrawPong	3
+../Core/Src/pong.c:78:6:PongReset	1
+../Core/Src/pong.c:85:13:PongMovement	15
+../Core/Src/pong.c:153:6:DrawText	1
+../Core/Src/pong.c:159:6:DrawScore	1
+../Core/Src/pong.c:169:6:ResetScore	1
