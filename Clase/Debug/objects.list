@@ -6,6 +6,7 @@
 "./Core/Src/Scheduller.o"
 "./Core/Src/Semaphore.o"
 "./Core/Src/Task.o"
+"./Core/Src/fonts.o"
 "./Core/Src/main.o"
 "./Core/Src/mutex.o"
 "./Core/Src/pong.o"

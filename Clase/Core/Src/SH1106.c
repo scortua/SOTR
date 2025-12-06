@@ -145,12 +145,12 @@ void SH1106_Clear (void)
 }
 
 void SH1106_I2C_WriteMulti(uint8_t address, uint8_t reg, uint8_t* data, uint16_t count) {
-uint8_t dt[256];
-dt[0] = reg;
-uint8_t i;
-for(i = 0; i < count; i++)
-dt[i+1] = data[i];
-HAL_I2C_Master_Transmit(SH1106_I2C, address, dt, count+1, 10);
+	uint8_t dt[256];
+	dt[0] = reg;
+	uint8_t i;
+	for(i = 0; i < count; i++)
+	dt[i+1] = data[i];
+	HAL_I2C_Master_Transmit(SH1106_I2C, address, dt, count+1, 10);
 }
 
 void SH1106_I2C_Write(uint8_t address, uint8_t reg, uint8_t data) {
@@ -158,4 +158,43 @@ void SH1106_I2C_Write(uint8_t address, uint8_t reg, uint8_t data) {
 	dt[0] = reg;
 	dt[1] = data;
 	HAL_I2C_Master_Transmit(SH1106_I2C, address, dt, 2, 10);
+}
+
+char SH1106_Putc(char ch, FontDef_t* Font, SH1106_COLOR_t color) {
+	uint32_t i, b, j;
+	if (
+		SH1106_WIDTH <= (SH1106.CurrentX + Font->FontWidth) ||
+		SH1106_HEIGHT <= (SH1106.CurrentY + Font->FontHeight)
+	) {
+		return 0;
+	}
+	for (i = 0; i < Font->FontHeight; i++) {
+		b = Font->data[(ch - 32) * Font->FontHeight + i];
+		for (j = 0; j < Font->FontWidth; j++) {
+			if ((b << j) & 0x8000) {
+				SH1106_DrawPixel(SH1106.CurrentX + j, (SH1106.CurrentY + i), (SH1106_COLOR_t) color);
+			} else {
+				SH1106_DrawPixel(SH1106.CurrentX + j, (SH1106.CurrentY + i), (SH1106_COLOR_t)!color);
+			}
+		}
+	}
+	SH1106.CurrentX += Font->FontWidth;
+	return ch;
+}
+
+char SH1106_Puts(char* str, FontDef_t* Font, SH1106_COLOR_t color) {
+	/* Write characters */
+	while (*str) {
+		/* Write character by character */
+		if (SH1106_Putc(*str, Font, color) != *str) {
+			/* Return error */
+			return *str;
+		}
+
+		/* Increase string pointer */
+		str++;
+	}
+
+	/* Everything OK, zero should be returned */
+	return *str;
 }

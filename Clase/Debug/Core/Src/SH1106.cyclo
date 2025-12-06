@@ -6,3 +6,5 @@
 ../Core/Src/SH1106.c:141:6:SH1106_Clear	1
 ../Core/Src/SH1106.c:147:6:SH1106_I2C_WriteMulti	2
 ../Core/Src/SH1106.c:156:6:SH1106_I2C_Write	1
+../Core/Src/SH1106.c:163:6:SH1106_Putc	6
+../Core/Src/SH1106.c:185:6:SH1106_Puts	3

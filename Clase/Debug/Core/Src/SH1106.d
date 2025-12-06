@@ -31,7 +31,7 @@ Core/Src/SH1106.o: ../Core/Src/SH1106.c ../Core/Inc/SH1106.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Core/Inc/pong.h ../Core/Inc/SH1106.h ../Core/Inc/AppTypes.h \
  ../Core/Inc/Events.h ../Core/Inc/Queue.h ../Core/Inc/Task.h \
- ../Core/Inc/Scheduller.h ../Core/Inc/portable.h
+ ../Core/Inc/Scheduller.h ../Core/Inc/portable.h ../Core/Inc/fonts.h
 ../Core/Inc/SH1106.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -72,3 +72,4 @@ Core/Src/SH1106.o: ../Core/Src/SH1106.c ../Core/Inc/SH1106.h \
 ../Core/Inc/Task.h:
 ../Core/Inc/Scheduller.h:
 ../Core/Inc/portable.h:
+../Core/Inc/fonts.h:

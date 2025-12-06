@@ -31,6 +31,11 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
+typedef enum{
+	Pantalla_principal = 0,
+	Juego
+}ESTADO_JUEGO;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -52,11 +57,11 @@ I2C_HandleTypeDef hi2c1;
 /* USER CODE BEGIN PV */
 
 TaskControlBlock_t TcbTarea1;
-u32 StackTarea1[RTOS_MIN_STACK_SIZE * 4];
+u32 StackTarea1[RTOS_MIN_STACK_SIZE * 8];
 TaskControlBlock_t TcbTarea2;
 u32 StackTarea2[RTOS_MIN_STACK_SIZE * 2];
 TaskControlBlock_t TcbTarea3;
-u32 StackTarea3[RTOS_MIN_STACK_SIZE];
+u32 StackTarea3[RTOS_MIN_STACK_SIZE * 2];
 TaskControlBlock_t TcbTarea4;
 u32 StackTarea4[RTOS_MIN_STACK_SIZE];
 //SemaphoreHandler_t Semaforo;
@@ -85,6 +90,9 @@ void Tarea3(void);
 void Tarea4(void);
 
 uint32_t playery;
+
+
+ESTADO_JUEGO est_jue = Pantalla_principal;
 /* USER CODE END 0 */
 
 /**
@@ -124,9 +132,9 @@ int main(void)
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   RTOS_Init();
-  RTOS_CreateTask(&TcbTarea1, "Actualizar pantalla",1,2,StackTarea1,RTOS_MIN_STACK_SIZE * 4,Tarea1);
+  RTOS_CreateTask(&TcbTarea1, "Actualizar pantalla",1,2,StackTarea1,RTOS_MIN_STACK_SIZE * 8,Tarea1);
   RTOS_CreateTask(&TcbTarea2, "Tomar valor i/o",2,1,StackTarea2,RTOS_MIN_STACK_SIZE * 2,Tarea2);
-  RTOS_CreateTask(&TcbTarea3, "GameLogic",3,3,StackTarea3,RTOS_MIN_STACK_SIZE,Tarea3);
+  RTOS_CreateTask(&TcbTarea3, "GameLogic",3,3,StackTarea3,RTOS_MIN_STACK_SIZE * 2,Tarea3);
   RTOS_CreateTask(&TcbTarea4, "Sonido", 4,4,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
   //Semaphore_Init(&Semaforo,5,0);
   //Message_Init(&Msg, &MsgPool, sizeof(u32), 2);
@@ -367,24 +375,37 @@ void Tarea1(void){
 		if(Mutex_Take(&Mutex) == MUTEX_OK){
 			// Dibujar jugadores
 			DrawPlayers();
-			//Dibujar pelota
+			//	Dibujar pelota
 			DrawPong();
+			// Dibujar texto explicativo en caso de que no se este jugando
+			if(est_jue == Pantalla_principal){
+				DrawText();
+				ResetScore();
+			}
+			//Dibujar Score de los jugadores
+			DrawScore();
 			Mutex_Give(&Mutex);
-			RTOS_Delay(5);
+			RTOS_Delay(1);
 		}
 	}
 }
 
 void Tarea2(void){
+	GPIO_PinState Boton;
 	while(1){
 		// Leer el primer canal y segundo canal
 		// Dependiendo de los instantes
 		if(Mutex_Take(&Mutex) == MUTEX_OK){
+			Boton = HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin);
+			if(Boton == GPIO_PIN_SET){
+				est_jue = !est_jue;
+				RTOS_Delay(100);
+			}
 			HAL_ADC_Start_DMA(&hadc1, &playery, 2);
 			RTOS_Delay(5);
 			HAL_ADC_Stop_DMA(&hadc1);
 			Mutex_Give(&Mutex);
-			RTOS_Delay(1);
+			RTOS_Delay(10);
 		}
 	}
 }
@@ -395,7 +416,11 @@ void Tarea3(void){
 		if(Mutex_Take(&Mutex) == MUTEX_OK){
 			UpdateHeadPlayer1(playery);
 			UpdateHeadPlayer2(playery);
-			Estado_juego = PongMovement();
+			if(est_jue == Juego){
+				Estado_juego = PongMovement();
+			}else{
+				PongReset();
+			}
 			if(Estado_juego == GOL){
 				Mutex_Give(&Mutex);
 				RTOS_Delay(1000);
