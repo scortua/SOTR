@@ -17,7 +17,7 @@
 #define x_center				64
 #define y_center				30
 
-#define Speed_y					2
+#define Speed_y					3
 #define Speed_x					1
 
 extern EventHandler_t Event;

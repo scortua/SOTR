@@ -4133,7 +4133,7 @@ void PongReset(void){
  8001ccc:	701a      	strb	r2, [r3, #0]
 	Speed_Pong_y = Speed_y;
  8001cce:	4b07      	ldr	r3, [pc, #28]	@ (8001cec <PongReset+0x34>)
- 8001cd0:	2202      	movs	r2, #2
+ 8001cd0:	2203      	movs	r2, #3
  8001cd2:	701a      	strb	r2, [r3, #0]
 }
  8001cd4:	bf00      	nop
@@ -4162,7 +4162,7 @@ Status_Pong PongMovement(void){
 	if((Speed_Pong_y == -Speed_y) && ((Head_Pong_y + Speed_Pong_y) < 0)){
  8001cfa:	4b8e      	ldr	r3, [pc, #568]	@ (8001f34 <PongMovement+0x244>)
  8001cfc:	f993 3000 	ldrsb.w	r3, [r3]
- 8001d00:	f113 0f02 	cmn.w	r3, #2
+ 8001d00:	f113 0f03 	cmn.w	r3, #3
  8001d04:	d128      	bne.n	8001d58 <PongMovement+0x68>
  8001d06:	4b8c      	ldr	r3, [pc, #560]	@ (8001f38 <PongMovement+0x248>)
  8001d08:	f9b3 3000 	ldrsh.w	r3, [r3]
@@ -4195,7 +4195,7 @@ Status_Pong PongMovement(void){
  8001d46:	801a      	strh	r2, [r3, #0]
 		Speed_Pong_y = Speed_y;
  8001d48:	4b7a      	ldr	r3, [pc, #488]	@ (8001f34 <PongMovement+0x244>)
- 8001d4a:	2202      	movs	r2, #2
+ 8001d4a:	2203      	movs	r2, #3
  8001d4c:	701a      	strb	r2, [r3, #0]
 		Events_Set(&Event, EVENT_WALL_COLLISION);
  8001d4e:	2102      	movs	r1, #2
@@ -4206,7 +4206,7 @@ Status_Pong PongMovement(void){
 		if((Speed_Pong_y == Speed_y) && ((Head_Pong_y + Speed_Pong_y) > 63 - tamanio_pong - 1)){
  8001d58:	4b76      	ldr	r3, [pc, #472]	@ (8001f34 <PongMovement+0x244>)
  8001d5a:	f993 3000 	ldrsb.w	r3, [r3]
- 8001d5e:	2b02      	cmp	r3, #2
+ 8001d5e:	2b03      	cmp	r3, #3
  8001d60:	d128      	bne.n	8001db4 <PongMovement+0xc4>
  8001d62:	4b75      	ldr	r3, [pc, #468]	@ (8001f38 <PongMovement+0x248>)
  8001d64:	f9b3 3000 	ldrsh.w	r3, [r3]
@@ -4238,7 +4238,7 @@ Status_Pong PongMovement(void){
  8001da2:	801a      	strh	r2, [r3, #0]
 			Speed_Pong_y = - Speed_y;
  8001da4:	4b63      	ldr	r3, [pc, #396]	@ (8001f34 <PongMovement+0x244>)
- 8001da6:	22fe      	movs	r2, #254	@ 0xfe
+ 8001da6:	22fd      	movs	r2, #253	@ 0xfd
  8001da8:	701a      	strb	r2, [r3, #0]
 			Events_Set(&Event, EVENT_WALL_COLLISION);
  8001daa:	2102      	movs	r1, #2
@@ -4254,7 +4254,7 @@ Status_Pong PongMovement(void){
  8001dbc:	d114      	bne.n	8001de8 <PongMovement+0xf8>
 				Speed_Pong_y = Speed_y;
  8001dbe:	4b5d      	ldr	r3, [pc, #372]	@ (8001f34 <PongMovement+0x244>)
- 8001dc0:	2202      	movs	r2, #2
+ 8001dc0:	2203      	movs	r2, #3
  8001dc2:	701a      	strb	r2, [r3, #0]
 				Head_Pong_y += Speed_Pong_y;
  8001dc4:	4b5b      	ldr	r3, [pc, #364]	@ (8001f34 <PongMovement+0x244>)
@@ -4281,7 +4281,7 @@ Status_Pong PongMovement(void){
  8001df0:	d114      	bne.n	8001e1c <PongMovement+0x12c>
 					Speed_Pong_y = -Speed_y;
  8001df2:	4b50      	ldr	r3, [pc, #320]	@ (8001f34 <PongMovement+0x244>)
- 8001df4:	22fe      	movs	r2, #254	@ 0xfe
+ 8001df4:	22fd      	movs	r2, #253	@ 0xfd
  8001df6:	701a      	strb	r2, [r3, #0]
 					Head_Pong_y += Speed_Pong_y;
  8001df8:	4b4e      	ldr	r3, [pc, #312]	@ (8001f34 <PongMovement+0x244>)
