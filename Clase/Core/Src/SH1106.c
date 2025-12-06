@@ -141,7 +141,6 @@ void SH1106_GotoXY(uint16_t x, uint16_t y) {
 void SH1106_Clear (void)
 {
 	SH1106_Fill (0);
-    SH1106_UpdateScreen();
 }
 
 void SH1106_I2C_WriteMulti(uint8_t address, uint8_t reg, uint8_t* data, uint16_t count) {

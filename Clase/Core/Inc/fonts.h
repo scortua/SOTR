@@ -17,5 +17,6 @@ typedef struct {
 } FontDef_t;
 
 extern FontDef_t Font_7x10;
+extern FontDef_t Font_6x8;
 
 #endif /* INC_FONTS_H_ */

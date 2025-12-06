@@ -135,7 +135,7 @@ int main(void)
   RTOS_CreateTask(&TcbTarea1, "Actualizar pantalla",1,2,StackTarea1,RTOS_MIN_STACK_SIZE * 8,Tarea1);
   RTOS_CreateTask(&TcbTarea2, "Tomar valor i/o",2,1,StackTarea2,RTOS_MIN_STACK_SIZE * 2,Tarea2);
   RTOS_CreateTask(&TcbTarea3, "GameLogic",3,3,StackTarea3,RTOS_MIN_STACK_SIZE * 2,Tarea3);
-  RTOS_CreateTask(&TcbTarea4, "Sonido", 4,4,StackTarea4,RTOS_MIN_STACK_SIZE, Tarea4);
+  RTOS_CreateTask(&TcbTarea4, "Sonido", 4,4,StackTarea4,RTOS_MIN_STACK_SIZE * 2, Tarea4);
   //Semaphore_Init(&Semaforo,5,0);
   //Message_Init(&Msg, &MsgPool, sizeof(u32), 2);
   Events_Init(&Event);
@@ -384,6 +384,7 @@ void Tarea1(void){
 			}
 			//Dibujar Score de los jugadores
 			DrawScore();
+			SH1106_UpdateScreen();
 			Mutex_Give(&Mutex);
 			RTOS_Delay(1);
 		}
@@ -440,13 +441,13 @@ void Tarea4(void){
 				if(Eventos & EVENT_PLAYER_COLLISION){
 					Events_Clear(&Event, EVENT_PLAYER_COLLISION);
 					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
-					RTOS_Delay(2);
+					RTOS_Delay(30);
 					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
 				}
 				if(Eventos & EVENT_WALL_COLLISION){
 					Events_Clear(&Event, EVENT_WALL_COLLISION);
 					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_SET);
-					RTOS_Delay(10);
+					RTOS_Delay(20);
 					HAL_GPIO_WritePin(BUZZER_GPIO_Port, BUZZER_Pin, GPIO_PIN_RESET);
 				}
 				if(Eventos & EVENT_GOL){

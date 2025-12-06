@@ -4,7 +4,7 @@
 ../Core/Src/SH1106.c:112:6:SH1106_DrawPixel	5
 ../Core/Src/SH1106.c:134:6:SH1106_GotoXY	1
 ../Core/Src/SH1106.c:141:6:SH1106_Clear	1
-../Core/Src/SH1106.c:147:6:SH1106_I2C_WriteMulti	2
-../Core/Src/SH1106.c:156:6:SH1106_I2C_Write	1
-../Core/Src/SH1106.c:163:6:SH1106_Putc	6
-../Core/Src/SH1106.c:185:6:SH1106_Puts	3
+../Core/Src/SH1106.c:146:6:SH1106_I2C_WriteMulti	2
+../Core/Src/SH1106.c:155:6:SH1106_I2C_Write	1
+../Core/Src/SH1106.c:162:6:SH1106_Putc	6
+../Core/Src/SH1106.c:184:6:SH1106_Puts	3

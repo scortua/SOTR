@@ -44,7 +44,6 @@ void DrawPlayers(void){
 	for(int i = head_player_2;i < head_player_2 + tamanio_jugador;i++){
 		SH1106_DrawPixel(129, i, SH1106_COLOR_WHITE);
 	}
-	SH1106_UpdateScreen();
 }
 
 void UpdateHeadPlayer1(u32 head){
@@ -72,7 +71,6 @@ void DrawPong(void){
 			SH1106_DrawPixel(j, i, SH1106_COLOR_WHITE);
 		}
 	}
-	SH1106_UpdateScreen();
 }
 
 void PongReset(void){
@@ -151,10 +149,9 @@ Status_Pong PongMovement(void){
 }
 
 void DrawText(void){
-	SH1106_GotoXY(2, 50);
-	SH1106_Puts("Presione para jugar", &Font_7x10, SH1106_COLOR_WHITE);
-	SH1106_UpdateScreen();
-}
+	SH1106_GotoXY(10, 50);
+	SH1106_Puts("Presione para jugar", &Font_6x8, SH1106_COLOR_WHITE);
+	}
 
 void DrawScore(void){
 	sprintf(&Score_player_1_c,"%i",Score_player_1);
@@ -163,7 +160,6 @@ void DrawScore(void){
 	SH1106_Puts(Score_player_1_c, &Font_7x10, SH1106_COLOR_WHITE);
 	SH1106_GotoXY(107, 2);
 	SH1106_Puts(Score_player_2_c, &Font_7x10, SH1106_COLOR_WHITE);
-	SH1106_UpdateScreen();
 }
 
 void ResetScore(void){
