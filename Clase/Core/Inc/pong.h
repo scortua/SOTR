@@ -34,4 +34,6 @@ void DrawText(void);
 
 void DrawScore(void);
 
+void ResetScore(void);
+
 #endif /* INC_PONG_H_ */
